@@ -90,6 +90,21 @@ const config = {
         contextualSearch: true,
       },
     }),
+  plugins: [
+    [
+      '@signalwire/docusaurus-plugin-llms-txt',
+      {
+        siteTitle: 'LumoAuth Documentation',
+        siteDescription: 'Simplified auth and authz for AI agents and apps',
+        depth: 3,
+        content: {
+          includeBlog: true,
+          includePages: true,
+          enableLlmsFullTxt: true
+        }
+      }
+    ]
+  ],
 };
 
 module.exports = config;
