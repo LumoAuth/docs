@@ -59,13 +59,13 @@ const config = {
       },
       navbar: {
         title: 'LumoAuth',
-	logo: {
-	  alt: 'LumoAuth',
-	  src: 'img/lumo-light.png',
-	  srcDark: 'img/lumo-dark.png',
-	  width: 32,
-	  height: 32,
-	},
+        logo: {
+          alt: 'LumoAuth',
+          src: 'img/lumo-light.png',
+          srcDark: 'img/lumo-dark.png',
+          width: 32,
+          height: 32,
+        },
         items: [
           {
             href: 'https://github.com/lumoauth/docs',
@@ -82,6 +82,12 @@ const config = {
         theme: require('prism-react-renderer').themes.github,
         darkTheme: require('prism-react-renderer').themes.dracula,
         additionalLanguages: ['bash', 'json', 'python', 'php', 'java'],
+      },
+      algolia: {
+        appId: 'EI7JZQKLDP',
+        apiKey: '8c98e0e14f49c548e4e7205372831740',
+        indexName: 'LumoAuth Docs',
+        contextualSearch: true,
       },
     }),
 };
