@@ -621,83 +621,431 @@ When an agent calls the UserInfo endpoint, it receives agent-specific informatio
 }
 ```
 
-## Integrating with LangGraph
+## Integrating with Agent Frameworks
 
-LumoAuth agents can be seamlessly integrated into LangGraph architectures. This example shows 
-    how to create a LangGraph agent that uses LumoAuth to authenticate, enforce budget 
+LumoAuth agents can be seamlessly integrated into popular agent frameworks. Each example below
+    shows how to create an agent that uses LumoAuth to authenticate, enforce budget
     policies, and securely exchange tokens for accessing an MCP server as a tool.
+
+:::info[Prerequisites]
+All examples below assume `LumoAuthAgent` is imported from the [complete example above](#complete-self-contained-example)
+and that environment variables `LUMOAUTH_URL`, `LUMOAUTH_TENANT`, `AGENT_CLIENT_ID`, and `AGENT_CLIENT_SECRET` are set.
+:::
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+<TabItem value="langchain" label="LangChain / LangGraph">
+
+```bash
+pip install langchain-openai langgraph
+```
 
 ```python
 import os
 from langchain_openai import ChatOpenAI
 from langchain_core.tools import tool
 from langgraph.prebuilt import create_react_agent
-# Assuming LumoAuthAgent is imported from the previous example
 # from lumoauth_agent import LumoAuthAgent
 
-# 1. Initialize the LumoAuth Agent
+# 1. Initialize and authenticate the LumoAuth Agent
 lumo_agent = LumoAuthAgent(
     base_url=os.environ.get('LUMOAUTH_URL', 'https://app.lumoauth.dev'),
     tenant=os.environ.get('LUMOAUTH_TENANT', 'acme-corp'),
     client_id=os.environ.get('AGENT_CLIENT_ID'),
     client_secret=os.environ.get('AGENT_CLIENT_SECRET')
 )
-
-# Ensure agent is authenticated before starting
 lumo_agent.authenticate()
 
 # 2. Define tools that check LumoAuth capabilities
 @tool
 def search_company_documents(query: str) -> str:
     """Search internal company documents."""
-    # Enforce capability check
     if not lumo_agent.has_capability('read:documents'):
         return "Error: Agent lacks 'read:documents' capability."
-    
-    # In a real scenario, this would use the lumo_agent.api_request
     return f"Found 3 documents matching '{query}'"
 
 @tool
 def query_financial_mcp(metric: str) -> str:
     """Query the secured financial metrics MCP server."""
-    # Enforce capability check
     if not lumo_agent.has_capability('mcp:financial'):
         return "Error: Agent lacks 'mcp:financial' capability."
-        
-    # Get a dedicated token for the MCP server using Token Exchange
     mcp_token = lumo_agent.get_mcp_token("urn:mcp:financial-data")
     if not mcp_token:
         return "Error: Failed to obtain token for Financial MCP server."
-        
-    # Example: Call the secured MCP server with the exchanged token
-    # headers = {"Authorization": f"Bearer {mcp_token}"}
-    # response = requests.post("https://mcp.finance.internal/query", headers=headers, json={"metric": metric})
     return f"Retrieved {metric}: $1.2M (Authenticated via MCP Token Exchange)"
 
-# 3. Create the LangGraph React Agent
+# 3. Create the LangGraph ReAct Agent
 tools = [search_company_documents, query_financial_mcp]
 llm = ChatOpenAI(model="gpt-4", temperature=0)
-
-# Build the Graph
 agent_executor = create_react_agent(llm, tools)
 
 # 4. Run the graph
 def run_agent_workflow(user_query: str):
-    # Check overall budget before execution
     budget = lumo_agent.get_budget_status()
     if budget and budget.get('tokens_used_today', 0) >= budget.get('max_tokens_per_day', float('inf')):
         print("Agent budget exhausted for today.")
         return
-        
-    print(f"Running query: {user_query}")
+
     events = agent_executor.stream(
         {"messages": [("user", user_query)]},
         stream_mode="values",
     )
-    
     for event in events:
         event["messages"][-1].pretty_print()
 
 if __name__ == "__main__":
     run_agent_workflow("Search documents for Q3 performance, then query the financial MCP for EBITDA.")
 ```
+
+</TabItem>
+<TabItem value="crewai" label="CrewAI">
+
+```bash
+pip install crewai crewai-tools
+```
+
+```python
+import os
+from crewai import Agent, Task, Crew
+from crewai.tools import tool
+# from lumoauth_agent import LumoAuthAgent
+
+# 1. Initialize and authenticate the LumoAuth Agent
+lumo_agent = LumoAuthAgent(
+    base_url=os.environ.get('LUMOAUTH_URL', 'https://app.lumoauth.dev'),
+    tenant=os.environ.get('LUMOAUTH_TENANT', 'acme-corp'),
+    client_id=os.environ.get('AGENT_CLIENT_ID'),
+    client_secret=os.environ.get('AGENT_CLIENT_SECRET')
+)
+lumo_agent.authenticate()
+
+# 2. Define tools that check LumoAuth capabilities
+@tool
+def search_company_documents(query: str) -> str:
+    """Search internal company documents for the given query."""
+    if not lumo_agent.has_capability('read:documents'):
+        return "Error: Agent lacks 'read:documents' capability."
+    return f"Found 3 documents matching '{query}'"
+
+@tool
+def query_financial_mcp(metric: str) -> str:
+    """Query the secured financial metrics MCP server for a given metric."""
+    if not lumo_agent.has_capability('mcp:financial'):
+        return "Error: Agent lacks 'mcp:financial' capability."
+    mcp_token = lumo_agent.get_mcp_token("urn:mcp:financial-data")
+    if not mcp_token:
+        return "Error: Failed to obtain token for Financial MCP server."
+    return f"Retrieved {metric}: $1.2M (Authenticated via MCP Token Exchange)"
+
+# 3. Check budget before running
+budget = lumo_agent.get_budget_status()
+if budget and budget.get('tokens_used_today', 0) >= budget.get('max_tokens_per_day', float('inf')):
+    raise RuntimeError("Agent budget exhausted for today.")
+
+# 4. Create CrewAI agents and tasks
+researcher = Agent(
+    role="Research Analyst",
+    goal="Find relevant company documents and financial metrics",
+    backstory="You are a senior analyst at a financial firm.",
+    tools=[search_company_documents, query_financial_mcp],
+    verbose=True,
+)
+
+research_task = Task(
+    description="Search documents for Q3 performance, then query the financial MCP for EBITDA.",
+    expected_output="A summary of Q3 performance with EBITDA figures.",
+    agent=researcher,
+)
+
+# 5. Assemble and run the Crew
+crew = Crew(agents=[researcher], tasks=[research_task], verbose=True)
+result = crew.kickoff()
+print(result)
+```
+
+</TabItem>
+<TabItem value="agno" label="Agno">
+
+```bash
+pip install agno openai
+```
+
+```python
+import os
+from agno.agent import Agent
+from agno.tools import tool
+from agno.models.openai import OpenAIChat
+# from lumoauth_agent import LumoAuthAgent
+
+# 1. Initialize and authenticate the LumoAuth Agent
+lumo_agent = LumoAuthAgent(
+    base_url=os.environ.get('LUMOAUTH_URL', 'https://app.lumoauth.dev'),
+    tenant=os.environ.get('LUMOAUTH_TENANT', 'acme-corp'),
+    client_id=os.environ.get('AGENT_CLIENT_ID'),
+    client_secret=os.environ.get('AGENT_CLIENT_SECRET')
+)
+lumo_agent.authenticate()
+
+# 2. Define tools that check LumoAuth capabilities
+@tool
+def search_company_documents(query: str) -> str:
+    """Search internal company documents for the given query."""
+    if not lumo_agent.has_capability('read:documents'):
+        return "Error: Agent lacks 'read:documents' capability."
+    return f"Found 3 documents matching '{query}'"
+
+@tool
+def query_financial_mcp(metric: str) -> str:
+    """Query the secured financial metrics MCP server for a given metric."""
+    if not lumo_agent.has_capability('mcp:financial'):
+        return "Error: Agent lacks 'mcp:financial' capability."
+    mcp_token = lumo_agent.get_mcp_token("urn:mcp:financial-data")
+    if not mcp_token:
+        return "Error: Failed to obtain token for Financial MCP server."
+    return f"Retrieved {metric}: $1.2M (Authenticated via MCP Token Exchange)"
+
+# 3. Check budget before running
+budget = lumo_agent.get_budget_status()
+if budget and budget.get('tokens_used_today', 0) >= budget.get('max_tokens_per_day', float('inf')):
+    raise RuntimeError("Agent budget exhausted for today.")
+
+# 4. Create and run the Agno Agent
+agent = Agent(
+    name="Research Analyst",
+    model=OpenAIChat(id="gpt-4"),
+    tools=[search_company_documents, query_financial_mcp],
+    instructions=[
+        "You are a senior analyst at a financial firm.",
+        "Use tools to search documents and query financial metrics.",
+    ],
+    markdown=True,
+)
+
+agent.print_response(
+    "Search documents for Q3 performance, then query the financial MCP for EBITDA."
+)
+```
+
+</TabItem>
+<TabItem value="google-adk" label="Google ADK">
+
+```bash
+pip install google-adk
+```
+
+```python
+import os
+from google.adk.agents import Agent
+from google.adk.tools import FunctionTool
+from google.adk.runners import Runner
+from google.adk.sessions import InMemorySessionService
+from google.genai import types
+# from lumoauth_agent import LumoAuthAgent
+
+# 1. Initialize and authenticate the LumoAuth Agent
+lumo_agent = LumoAuthAgent(
+    base_url=os.environ.get('LUMOAUTH_URL', 'https://app.lumoauth.dev'),
+    tenant=os.environ.get('LUMOAUTH_TENANT', 'acme-corp'),
+    client_id=os.environ.get('AGENT_CLIENT_ID'),
+    client_secret=os.environ.get('AGENT_CLIENT_SECRET')
+)
+lumo_agent.authenticate()
+
+# 2. Define tools that check LumoAuth capabilities
+def search_company_documents(query: str) -> dict:
+    """Search internal company documents for the given query."""
+    if not lumo_agent.has_capability('read:documents'):
+        return {"error": "Agent lacks 'read:documents' capability."}
+    return {"result": f"Found 3 documents matching '{query}'"}
+
+def query_financial_mcp(metric: str) -> dict:
+    """Query the secured financial metrics MCP server for a given metric."""
+    if not lumo_agent.has_capability('mcp:financial'):
+        return {"error": "Agent lacks 'mcp:financial' capability."}
+    mcp_token = lumo_agent.get_mcp_token("urn:mcp:financial-data")
+    if not mcp_token:
+        return {"error": "Failed to obtain token for Financial MCP server."}
+    return {"result": f"Retrieved {metric}: $1.2M (Authenticated via MCP Token Exchange)"}
+
+# 3. Check budget before running
+budget = lumo_agent.get_budget_status()
+if budget and budget.get('tokens_used_today', 0) >= budget.get('max_tokens_per_day', float('inf')):
+    raise RuntimeError("Agent budget exhausted for today.")
+
+# 4. Create the ADK Agent
+research_agent = Agent(
+    name="research_analyst",
+    model="gemini-2.0-flash",
+    description="A senior analyst that searches documents and queries financial metrics.",
+    instruction="Use tools to search documents and query financial metrics. Provide a summary.",
+    tools=[
+        FunctionTool(search_company_documents),
+        FunctionTool(query_financial_mcp),
+    ],
+)
+
+# 5. Run the agent
+async def main():
+    session_service = InMemorySessionService()
+    session = await session_service.create_session(
+        app_name="research_analyst", user_id="analyst_user"
+    )
+
+    runner = Runner(agent=research_agent, app_name="research_analyst", session_service=session_service)
+    content = types.Content(
+        role="user",
+        parts=[types.Part.from_text("Search documents for Q3 performance, then query the financial MCP for EBITDA.")],
+    )
+
+    async for event in runner.run_async(user_id="analyst_user", session_id=session.id, new_message=content):
+        if event.is_final_response():
+            for part in event.content.parts:
+                print(part.text)
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())
+```
+
+</TabItem>
+<TabItem value="openai-agents" label="OpenAI Agents SDK">
+
+```bash
+pip install openai-agents
+```
+
+```python
+import os
+import asyncio
+from agents import Agent, Runner, function_tool
+# from lumoauth_agent import LumoAuthAgent
+
+# 1. Initialize and authenticate the LumoAuth Agent
+lumo_agent = LumoAuthAgent(
+    base_url=os.environ.get('LUMOAUTH_URL', 'https://app.lumoauth.dev'),
+    tenant=os.environ.get('LUMOAUTH_TENANT', 'acme-corp'),
+    client_id=os.environ.get('AGENT_CLIENT_ID'),
+    client_secret=os.environ.get('AGENT_CLIENT_SECRET')
+)
+lumo_agent.authenticate()
+
+# 2. Define tools that check LumoAuth capabilities
+@function_tool
+def search_company_documents(query: str) -> str:
+    """Search internal company documents for the given query."""
+    if not lumo_agent.has_capability('read:documents'):
+        return "Error: Agent lacks 'read:documents' capability."
+    return f"Found 3 documents matching '{query}'"
+
+@function_tool
+def query_financial_mcp(metric: str) -> str:
+    """Query the secured financial metrics MCP server for a given metric."""
+    if not lumo_agent.has_capability('mcp:financial'):
+        return "Error: Agent lacks 'mcp:financial' capability."
+    mcp_token = lumo_agent.get_mcp_token("urn:mcp:financial-data")
+    if not mcp_token:
+        return "Error: Failed to obtain token for Financial MCP server."
+    return f"Retrieved {metric}: $1.2M (Authenticated via MCP Token Exchange)"
+
+# 3. Check budget before running
+budget = lumo_agent.get_budget_status()
+if budget and budget.get('tokens_used_today', 0) >= budget.get('max_tokens_per_day', float('inf')):
+    raise RuntimeError("Agent budget exhausted for today.")
+
+# 4. Create the OpenAI Agent
+research_agent = Agent(
+    name="Research Analyst",
+    instructions="You are a senior analyst. Use tools to search documents and query financial metrics.",
+    tools=[search_company_documents, query_financial_mcp],
+)
+
+# 5. Run the agent
+async def main():
+    result = await Runner.run(
+        research_agent,
+        "Search documents for Q3 performance, then query the financial MCP for EBITDA.",
+    )
+    print(result.final_output)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+</TabItem>
+<TabItem value="msft-agent-framework" label="Microsoft Agent Framework">
+
+```bash
+pip install agent-framework[openai]
+```
+
+```python
+import os
+import asyncio
+from typing import Annotated
+from agent_framework import ChatAgent, ai_function
+from agent_framework.openai import OpenAIChatClient
+# from lumoauth_agent import LumoAuthAgent
+
+# 1. Initialize and authenticate the LumoAuth Agent
+lumo_agent = LumoAuthAgent(
+    base_url=os.environ.get('LUMOAUTH_URL', 'https://app.lumoauth.dev'),
+    tenant=os.environ.get('LUMOAUTH_TENANT', 'acme-corp'),
+    client_id=os.environ.get('AGENT_CLIENT_ID'),
+    client_secret=os.environ.get('AGENT_CLIENT_SECRET')
+)
+lumo_agent.authenticate()
+
+# 2. Define tools that check LumoAuth capabilities
+@ai_function
+def search_company_documents(
+    query: Annotated[str, "The search query for company documents"],
+) -> str:
+    """Search internal company documents for the given query."""
+    if not lumo_agent.has_capability('read:documents'):
+        return "Error: Agent lacks 'read:documents' capability."
+    return f"Found 3 documents matching '{query}'"
+
+@ai_function
+def query_financial_mcp(
+    metric: Annotated[str, "The financial metric to query"],
+) -> str:
+    """Query the secured financial metrics MCP server for a given metric."""
+    if not lumo_agent.has_capability('mcp:financial'):
+        return "Error: Agent lacks 'mcp:financial' capability."
+    mcp_token = lumo_agent.get_mcp_token("urn:mcp:financial-data")
+    if not mcp_token:
+        return "Error: Failed to obtain token for Financial MCP server."
+    return f"Retrieved {metric}: $1.2M (Authenticated via MCP Token Exchange)"
+
+# 3. Check budget before running
+budget = lumo_agent.get_budget_status()
+if budget and budget.get('tokens_used_today', 0) >= budget.get('max_tokens_per_day', float('inf')):
+    raise RuntimeError("Agent budget exhausted for today.")
+
+# 4. Create the Microsoft Agent Framework agent
+client = OpenAIChatClient(model="gpt-4")
+agent = ChatAgent(
+    chat_client=client,
+    name="Research Analyst",
+    instructions="You are a senior analyst. Use tools to search documents and query financial metrics.",
+    tools=[search_company_documents, query_financial_mcp],
+)
+
+# 5. Run the agent
+async def main():
+    thread = agent.get_new_thread()
+    response = await agent.run(
+        messages="Search documents for Q3 performance, then query the financial MCP for EBITDA.",
+        thread=thread,
+    )
+    for message in response.messages:
+        print(message.text)
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+</TabItem>
+</Tabs>
