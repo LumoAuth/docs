@@ -87,3 +87,35 @@ Allows an agent to discover its own identity, capabilities (roles), and tenant e
 When building an agent, use the `/ask` API inside your tool definitions. 
     Before your agent attempts to call a tool like `get_document(id)`, it should perform an internal "pre-flight" check via `/ask`. 
     If `allowed` is false, the agent can use the `reason` field to inform the user or request delegation.
+
+### Using the Python SDK
+
+The `lumoauth` package exposes the Ask API via `ask()`, `is_allowed()`, and `get_identity()`:
+
+```bash
+pip install lumoauth
+```
+
+```python
+from lumoauth import LumoAuthAgent
+
+agent = LumoAuthAgent()   # reads env vars
+agent.authenticate()
+
+# Pre-flight check before executing a tool
+result = agent.ask("document.read", context={"id": "doc_99"})
+if result["allowed"]:
+    # proceed with the tool call
+    ...
+else:
+    print(f"Denied: {result['reason']}")
+
+# Shorthand
+if agent.is_allowed("document.read", {"id": "doc_99"}):
+    ...
+
+# Self-inspection
+identity = agent.get_identity()
+print(identity["capabilities"])   # e.g. ["ROLE_RESEARCHER", "ROLE_DATA_READER"]
+print(identity["workspace"])      # e.g. {"slug": "acme", "api_base": "/t/acme-corp/api/v1/"}
+```
