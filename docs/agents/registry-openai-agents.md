@@ -84,5 +84,5 @@ if __name__ == "__main__":
 
 ## Next Steps
 
-- [Agent Registry overview](./registry) — manage agent registrations, budgets, and capabilities
-- [JIT Permissions – OpenAI Agents SDK](./jit-openai-agents) — add just-in-time permission escalation
+- [Agent Registry overview](./registry) - manage agent registrations, budgets, and capabilities
+- [JIT Permissions – OpenAI Agents SDK](./jit-openai-agents) - add just-in-time permission escalation

@@ -38,7 +38,7 @@ Auth-->>Client: 8. Access Token
 
 :::tip[Why Use This Flow?]
 The Authorization Code flow is the most secure OAuth flow for web applications.
-User credentials are never exposed to your application — they're handled entirely by LumoAuth.
+User credentials are never exposed to your application - they're handled entirely by LumoAuth.
 :::
 
 
@@ -85,7 +85,7 @@ Location: https://myapp.com/callback?
 
 :::warning[Important: Verify the State]
 Always compare the `state` parameter in the callback with the one you sent.
-If they don't match, the request may be a CSRF attack — reject it immediately.
+If they don't match, the request may be a CSRF attack - reject it immediately.
 :::
 
 

@@ -9,7 +9,7 @@ Automate user provisioning and deprovisioning with your identity provider.
         
 SCIM (System for Cross-domain Identity Management) is an open standard for automating user provisioning.
             When you connect LumoAuth to an identity provider like Okta, Azure AD, or OneLogin, users are automatically
-            created, updated, and deactivated—no manual work required.
+            created, updated, and deactivated automatically.
 
         > [!NOTE]
 > **What SCIM Does**

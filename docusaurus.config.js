@@ -96,7 +96,7 @@ const config = {
       {
         siteTitle: 'LumoAuth Documentation',
         siteDescription: 'Simplified auth and authz for AI agents and apps',
-        depth: 3,
+        depth: 4,
         content: {
           includeBlog: true,
           includePages: true,

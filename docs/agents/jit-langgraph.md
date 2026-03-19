@@ -144,7 +144,7 @@ if __name__ == "__main__":
     ):
         event["messages"][-1].pretty_print()
 
-    # Cleanup — revokes all JIT tokens for this task
+    # Cleanup - revokes all JIT tokens for this task
     jit.complete_task()
 ```
 
@@ -160,5 +160,5 @@ if __name__ == "__main__":
 
 ## Next Steps
 
-- [JIT Permissions overview](./jit) — core concepts, API reference, and best practices
-- [Agent Registry – LangChain](./registry-langchain) — set up agent authentication first
+- [JIT Permissions overview](./jit) - core concepts, API reference, and best practices
+- [Agent Registry – LangChain](./registry-langchain) - set up agent authentication first

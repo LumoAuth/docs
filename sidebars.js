@@ -11,15 +11,128 @@ const sidebars = {
       id: 'quickstart',
       label: 'Quickstart',
     },
+    // ── User Guide ──
     {
-      type: 'doc',
-      id: 'authentication',
-      label: 'Authentication',
+      type: 'category',
+      label: 'User Guide',
+      collapsible: true,
+      collapsed: false,
+      items: [
+        {
+          type: 'category',
+          label: 'Getting Started',
+          link: { type: 'doc', id: 'user-guide/getting-started/overview' },
+          items: [
+            { type: 'doc', id: 'user-guide/getting-started/quick-start', label: 'Quick Start' },
+            { type: 'doc', id: 'user-guide/getting-started/concepts', label: 'Core Concepts' },
+            { type: 'doc', id: 'user-guide/getting-started/first-tenant', label: 'Configure Your Tenant' },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Authentication',
+          link: { type: 'doc', id: 'user-guide/authentication/overview' },
+          items: [
+            { type: 'doc', id: 'user-guide/authentication/email-password', label: 'Email & Password' },
+            { type: 'doc', id: 'user-guide/authentication/social-login', label: 'Social Login' },
+            { type: 'doc', id: 'user-guide/authentication/mfa', label: 'Multi-Factor Authentication' },
+            { type: 'doc', id: 'user-guide/authentication/adaptive-mfa', label: 'Adaptive MFA' },
+            { type: 'doc', id: 'user-guide/authentication/passkeys', label: 'Passkeys & WebAuthn' },
+            { type: 'doc', id: 'user-guide/authentication/enterprise-sso', label: 'Enterprise SSO' },
+            { type: 'doc', id: 'user-guide/authentication/device-flow', label: 'Device Authorization' },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Multi-Tenancy',
+          link: { type: 'doc', id: 'user-guide/multi-tenancy/overview' },
+          items: [
+            { type: 'doc', id: 'user-guide/multi-tenancy/tenant-setup', label: 'Tenant Setup' },
+            { type: 'doc', id: 'user-guide/multi-tenancy/tenant-portal', label: 'Tenant Portal' },
+            { type: 'doc', id: 'user-guide/multi-tenancy/custom-domains', label: 'Custom Domains' },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Access Control',
+          link: { type: 'doc', id: 'user-guide/access-control/overview' },
+          items: [
+            { type: 'doc', id: 'user-guide/access-control/roles-permissions', label: 'Roles & Permissions' },
+            { type: 'doc', id: 'user-guide/access-control/groups', label: 'Groups' },
+            { type: 'doc', id: 'user-guide/access-control/abac', label: 'ABAC' },
+            { type: 'doc', id: 'user-guide/access-control/zanzibar', label: 'Zanzibar (ReBAC)' },
+            { type: 'doc', id: 'user-guide/access-control/ai-policy-authoring', label: 'AI Policy Authoring' },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'User Management',
+          link: { type: 'doc', id: 'user-guide/user-management/overview' },
+          items: [
+            { type: 'doc', id: 'user-guide/user-management/invitations', label: 'Invitations' },
+            { type: 'doc', id: 'user-guide/user-management/sessions', label: 'Sessions' },
+            { type: 'doc', id: 'user-guide/user-management/account-self-service', label: 'Account Self-Service' },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Applications',
+          link: { type: 'doc', id: 'user-guide/applications/overview' },
+          items: [
+            { type: 'doc', id: 'user-guide/applications/oauth2-oidc', label: 'OAuth 2.0 & OIDC' },
+            { type: 'doc', id: 'user-guide/applications/saml', label: 'SAML Applications' },
+            { type: 'doc', id: 'user-guide/applications/signing-keys', label: 'Signing Keys' },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Compliance',
+          items: [
+            { type: 'doc', id: 'user-guide/compliance/gdpr', label: 'GDPR' },
+            { type: 'doc', id: 'user-guide/compliance/audit-logs', label: 'Audit Logs' },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Integrations',
+          items: [
+            { type: 'doc', id: 'user-guide/integrations/webhooks', label: 'Webhooks' },
+            { type: 'doc', id: 'user-guide/integrations/scim', label: 'SCIM 2.0' },
+            { type: 'doc', id: 'user-guide/integrations/email-templates', label: 'Email Templates' },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Security',
+          link: { type: 'doc', id: 'user-guide/security/overview' },
+          items: [
+            { type: 'doc', id: 'user-guide/security/rate-limiting', label: 'Rate Limiting' },
+            { type: 'doc', id: 'user-guide/security/best-practices', label: 'Best Practices' },
+          ],
+        },
+        { type: 'doc', id: 'user-guide/ai-agents/overview', label: 'AI Agents & MCP' },
+      ],
     },
+    // ── Quickstarts ──
     {
-      type: 'doc',
-      id: 'federation',
-      label: 'Identity Federation',
+      type: 'category',
+      label: 'Quickstarts',
+      items: [
+        { type: 'doc', id: 'quickstarts/react', label: 'React' },
+        { type: 'doc', id: 'quickstarts/node', label: 'Node.js / Express' },
+        { type: 'doc', id: 'quickstarts/python', label: 'Python' },
+      ],
+    },
+    // ── Developer ──
+    {
+      type: 'category',
+      label: 'Developer',
+      items: [
+        { type: 'doc', id: 'developer/sdks', label: 'SDKs & Libraries' },
+        { type: 'doc', id: 'developer/security-audits', label: 'Security Audits' },
+        { type: 'doc', id: 'authentication', label: 'Authentication' },
+        { type: 'doc', id: 'federation', label: 'Identity Federation' },
+      ],
     },
     // ── AI Agent Identity ──
     {

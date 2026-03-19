@@ -82,5 +82,5 @@ agent.print_response(
 
 ## Next Steps
 
-- [Agent Registry overview](./registry) — manage agent registrations, budgets, and capabilities
-- [JIT Permissions – Agno](./jit-agno) — add just-in-time permission escalation
+- [Agent Registry overview](./registry) - manage agent registrations, budgets, and capabilities
+- [JIT Permissions – Agno](./jit-agno) - add just-in-time permission escalation

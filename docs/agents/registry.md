@@ -81,12 +81,12 @@ All four can also be passed directly to the `LumoAuthAgent()` constructor.
 ```python
 from lumoauth import LumoAuthAgent, require_capability
 
-# 1. Initialize — reads env vars automatically
+# 1. Initialize - reads env vars automatically
 agent = LumoAuthAgent()
 
 # 2. Authenticate (OAuth 2.0 client credentials)
 if not agent.authenticate():
-    raise SystemExit("Authentication failed — check credentials.")
+    raise SystemExit("Authentication failed - check credentials.")
 
 # 3. Inspect identity and capabilities
 info = agent.get_agent_info()
@@ -105,7 +105,7 @@ if agent.has_capability("read:documents"):
 # 5. Token exchange for a secured MCP server (RFC 8693)
 mcp_token = agent.get_mcp_token("urn:mcp:financial-data")
 if mcp_token:
-    print("MCP token obtained — pass it to your MCP client.")
+    print("MCP token obtained - pass it to your MCP client.")
 ```
 
 ### Subclassing with Capability Gates

@@ -128,7 +128,7 @@ Receives and processes SAML Responses from the IdP. This endpoint:
 
 :::warning[Direct Calls Not Supported]
 The ACS endpoint only accepts SAML responses from configured IdPs.
-Do not call this endpoint directly — it's part of the SAML SSO flow.
+Do not call this endpoint directly - it's part of the SAML SSO flow.
 :::
 
 

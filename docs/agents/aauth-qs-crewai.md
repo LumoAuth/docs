@@ -39,7 +39,7 @@ aauth = AAuthClient(
 resource_token = "..."
 tokens = aauth.request_authorization(resource_token=resource_token, scope="read write")
 if tokens.get("authorization_required"):
-    raise RuntimeError("User consent required — implement OAuth redirect flow first")
+    raise RuntimeError("User consent required - implement OAuth redirect flow first")
 
 ACCESS_TOKEN = tokens["access_token"]
 
@@ -100,5 +100,5 @@ print(result)
 
 ## Next Steps
 
-- [AAuth Protocol spec](./aauth) — deep dive into the protocol
-- [JIT Permissions – CrewAI](./jit-crewai) — add per-operation permission escalation
+- [AAuth Protocol spec](./aauth) - deep dive into the protocol
+- [JIT Permissions – CrewAI](./jit-crewai) - add per-operation permission escalation

@@ -85,5 +85,5 @@ print(result)
 
 ## Next Steps
 
-- [Agent Registry overview](./registry) — manage agent registrations, budgets, and capabilities
-- [JIT Permissions – CrewAI](./jit-crewai) — add just-in-time permission escalation
+- [Agent Registry overview](./registry) - manage agent registrations, budgets, and capabilities
+- [JIT Permissions – CrewAI](./jit-crewai) - add just-in-time permission escalation

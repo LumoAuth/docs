@@ -40,7 +40,7 @@ aauth = AAuthClient(
 resource_token = "..."
 tokens = aauth.request_authorization(resource_token=resource_token, scope="read write")
 if tokens.get("authorization_required"):
-    raise RuntimeError("User consent required — implement OAuth redirect flow first")
+    raise RuntimeError("User consent required - implement OAuth redirect flow first")
 
 ACCESS_TOKEN = tokens["access_token"]
 
@@ -103,5 +103,5 @@ if __name__ == "__main__":
 
 ## Next Steps
 
-- [AAuth Protocol spec](./aauth) — full technical details
-- [JIT Permissions – OpenAI Agents SDK](./jit-openai-agents) — add per-operation permission escalation
+- [AAuth Protocol spec](./aauth) - full technical details
+- [JIT Permissions – OpenAI Agents SDK](./jit-openai-agents) - add per-operation permission escalation

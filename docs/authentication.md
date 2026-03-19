@@ -109,12 +109,12 @@ Scopes define what permissions your application is requesting. Common scopes inc
 ## Security Best Practices
 
     
-- **Always use HTTPS** — All OAuth traffic must be encrypted
-- **Use PKCE** — Even for server-side apps, PKCE adds defense in depth
-- **Store secrets securely** — Never expose client secrets in frontend code
-- **Validate state parameter** — Prevent CSRF attacks by verifying the state
-- **Use short-lived tokens** — Prefer refresh token rotation over long access tokens
-- **Validate redirect URIs** — Only allow exact matches, never wildcards
+- **Always use HTTPS** - All OAuth traffic must be encrypted
+- **Use PKCE** - Even for server-side apps, PKCE adds defense in depth
+- **Store secrets securely** - Never expose client secrets in frontend code
+- **Validate state parameter** - Prevent CSRF attacks by verifying the state
+- **Use short-lived tokens** - Prefer refresh token rotation over long access tokens
+- **Validate redirect URIs** - Only allow exact matches, never wildcards
 
 ## Next Steps
 

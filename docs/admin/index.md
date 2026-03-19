@@ -44,14 +44,14 @@ Generate one via the OAuth Client Credentials flow.
 
     
 ```bash
-# 1. Obtain an access token
+# 1. Obtain an access token using client credentials
 curl -X POST 'https://app.lumoauth.dev/t/acme-corp/api/v1/oauth/token' \
   -H 'Content-Type: application/x-www-form-urlencoded' \
-  -d 'grant_type=password&username=admin@acme.com&password=secret&client_id=admin-cli'
+  -d 'grant_type=client_credentials&client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&scope=admin'
 
 # 2. Use the token to list users
 curl 'https://app.lumoauth.dev/t/acme-corp/api/v1/admin/users' \
-  -H 'Authorization: Bearer '
+  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN'
 ```
 
 ## Authentication
@@ -102,8 +102,7 @@ Where:
 | Environment | Base URL |
 | --- | --- |
 | Production | `https://app.lumoauth.dev/t/\{tenantSlug\}/api/v1/admin` |
-| Staging | `https://api.staging.lumoauth.com/t/\{tenantSlug\}/api/v1/admin` |
-| Local Dev | `http://localhost:8000/t/\{tenantSlug\}/api/v1/admin` |
+| EU Production | `https://eu.app.lumoauth.dev/t/\{tenantSlug\}/api/v1/admin` |
 
 ## Common Patterns
 

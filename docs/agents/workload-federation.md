@@ -27,11 +27,11 @@ The flow is simple: your agent retrieves a signed JWT from its environment (the 
 
 To enable Workload Identity for an agent:
 
-1. **Navigate to AI Agents** — Go to the **AI Agents** section within your Tenant Portal dashboard.
-2. **Initiate Agent Setup** — Click the **Create Agent** button to start a new agent, or select an existing agent and click "Edit".
-3. **Select Identity Method** — In the Authentication Method section, choose **Workload Identity**.
-4. **Choose Provider** — Select your hosting platform (Kubernetes, AWS, GCP, Azure) from the **Cloud Provider** dropdown.
-5. **Configure Trust** — Fill in the provider-specific details (referenced below) to establish the trust relationship.
+1. **Navigate to AI Agents** - Go to the **AI Agents** section within your Tenant Portal dashboard.
+2. **Initiate Agent Setup** - Click the **Create Agent** button to start a new agent, or select an existing agent and click "Edit".
+3. **Select Identity Method** - In the Authentication Method section, choose **Workload Identity**.
+4. **Choose Provider** - Select your hosting platform (Kubernetes, AWS, GCP, Azure) from the **Cloud Provider** dropdown.
+5. **Configure Trust** - Fill in the provider-specific details (referenced below) to establish the trust relationship.
 
 ## Provider Guides
 

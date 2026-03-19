@@ -24,7 +24,7 @@ pip install lumoauth[aauth]
 ```python
 from lumoauth.aauth import AAuthClient
 
-# Generate a key pair (one-time) — or load an existing private key
+# Generate a key pair (one-time) - or load an existing private key
 private_pem, jwks = AAuthClient.generate_keypair()
 # Register the **jwks** with LumoAuth in the portal, then:
 
@@ -37,11 +37,11 @@ client = AAuthClient(
 # Assume you already have a resource_token from the resource server
 resource_token = "..."
 
-# Request authorisation (direct flow — no user interaction)
+# Request authorisation (direct flow - no user interaction)
 tokens = client.request_authorization(resource_token=resource_token, scope="read write")
 
 if tokens.get("authorization_required"):
-    # User consent needed — redirect the user
+    # User consent needed - redirect the user
     print("Redirect user to:", tokens["auth_url"])
     # After the user approves, exchange the code:
     #   tokens = client.exchange_code(code, tokens["request_token"])
@@ -76,5 +76,5 @@ resp = client.signed_request("GET", "https://api.example.com/v1/data",
 
 ## Next Steps
 
-- [AAuth Protocol spec](./aauth) — full technical details
-- [AAuth Quick Start – LangChain](./aauth-qs-langchain) — use AAuth inside a LangGraph agent
+- [AAuth Protocol spec](./aauth) - full technical details
+- [AAuth Quick Start – LangChain](./aauth-qs-langchain) - use AAuth inside a LangGraph agent

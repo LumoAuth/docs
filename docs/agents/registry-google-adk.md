@@ -101,5 +101,5 @@ if __name__ == "__main__":
 
 ## Next Steps
 
-- [Agent Registry overview](./registry) — manage agent registrations, budgets, and capabilities
-- [JIT Permissions – Google ADK](./jit-google-adk) — add just-in-time permission escalation
+- [Agent Registry overview](./registry) - manage agent registrations, budgets, and capabilities
+- [JIT Permissions – Google ADK](./jit-google-adk) - add just-in-time permission escalation

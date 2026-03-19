@@ -6,7 +6,7 @@ LumoAuth treats AI agents as first-class citizens in your identity system.
 
 :::note[Why This Matters]
 Traditional OAuth was designed for human users clicking through consent screens.
-AI agents are different — they operate autonomously, chain actions together, and need
+AI agents are different - they operate autonomously, chain actions together, and need
 fine-grained, verifiable authorization without human interaction for every request.
 :::
 

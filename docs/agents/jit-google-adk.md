@@ -134,7 +134,7 @@ async def main():
                 for part in event.content.parts:
                     print(part.text)
     finally:
-        # Always cleanup — revokes all JIT tokens for this task
+        # Always cleanup - revokes all JIT tokens for this task
         jit.complete_task()
 
 
@@ -153,5 +153,5 @@ if __name__ == "__main__":
 
 ## Next Steps
 
-- [JIT Permissions overview](./jit) — core concepts, API reference, and best practices
-- [Agent Registry – Google ADK](./registry-google-adk) — set up agent authentication first
+- [JIT Permissions overview](./jit) - core concepts, API reference, and best practices
+- [Agent Registry – Google ADK](./registry-google-adk) - set up agent authentication first

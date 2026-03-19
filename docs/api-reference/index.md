@@ -11,16 +11,16 @@ Check out the [Quickstart Guide](/quickstart) for a step-by-step introduction.
 
 ## Base URL
 
-All API requests should be made to:
+All API requests are scoped to your tenant using the tenant slug:
 
 ```
-https://app.lumoauth.dev/api/v1
+https://app.lumoauth.dev/t/{tenant_slug}/api/v1/
 ```
 
-For tenant-specific operations (most Admin API endpoints), requests include the tenant slug:
+For EU-hosted tenants:
 
 ```
-https://app.lumoauth.dev/t/{tenant_slug}/api/v1/admin/...
+https://eu.app.lumoauth.dev/t/{tenant_slug}/api/v1/
 ```
 
 ### Example Request
@@ -48,7 +48,7 @@ use the **Client Credentials** grant type.
 ### Authenticated Request
 
 ```bash
-curl https://app.lumoauth.dev/api/v1/userinfo \
+curl https://app.lumoauth.dev/t/acme-corp/api/v1/oauth/userinfo \
   -H "Authorization: Bearer sk_live_xxxxx"
 ```
 
@@ -118,20 +118,20 @@ Tenant (acme-corp)
 
 ```
 # User Management
-GET    /admin/users
-POST   /admin/users
-GET    /admin/users/:id
-PATCH  /admin/users/:id
-DELETE /admin/users/:id
+GET    /t/{tenant_slug}/api/v1/admin/users
+POST   /t/{tenant_slug}/api/v1/admin/users
+GET    /t/{tenant_slug}/api/v1/admin/users/:id
+PATCH  /t/{tenant_slug}/api/v1/admin/users/:id
+DELETE /t/{tenant_slug}/api/v1/admin/users/:id
 
 # Authorization
-POST   /abac/check
-POST   /abac/policies
+POST   /t/{tenant_slug}/api/v1/abac/check
+POST   /t/{tenant_slug}/api/v1/abac/policies
 
 # OAuth 2.0
-POST   /oauth/token
-GET    /oauth/authorize
-POST   /oauth/introspect
+POST   /t/{tenant_slug}/api/v1/oauth/token
+GET    /t/{tenant_slug}/api/v1/oauth/authorize
+POST   /t/{tenant_slug}/api/v1/oauth/introspect
 ```
 
 ## Request & Response Format

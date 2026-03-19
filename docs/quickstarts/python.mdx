@@ -1,0 +1,286 @@
+---
+sidebar_label: Python
+---
+
+import CursorPrompt from '@site/src/components/CursorPrompt';
+
+# Add authentication to your Python app
+
+<CursorPrompt prompt={`Set up LumoAuth authentication in a Python application using the lumoauth SDK.
+
+Install the SDK:
+pip install lumoauth
+
+Initialize the agent client:
+
+from lumoauth import LumoAuthAgent
+
+agent = LumoAuthAgent(
+    base_url="https://app.lumoauth.dev",
+    tenant="YOUR_TENANT_SLUG",
+    client_id="YOUR_CLIENT_ID",
+    client_secret="YOUR_CLIENT_SECRET",
+)
+agent.authenticate(scopes=["read:users"])
+
+Or use environment variables:
+LUMOAUTH_URL=https://app.lumoauth.dev
+LUMOAUTH_TENANT=YOUR_TENANT_SLUG
+AGENT_CLIENT_ID=YOUR_CLIENT_ID
+AGENT_CLIENT_SECRET=YOUR_CLIENT_SECRET
+
+Use the Ask API for authorization checks:
+
+if agent.is_allowed("read_document", context={"document_id": "doc-123"}):
+    print("Allowed")
+
+result = agent.ask("delete_user", context={"user_id": "u-456"})
+# { 'allowed': False, 'reason': 'insufficient_permissions', ... }
+
+Get agent identity and capabilities:
+
+info = agent.get_agent_info()
+if agent.has_capability("web_search"):
+    perform_search()
+
+Use delegation chains to act on behalf of users:
+
+from lumoauth import DelegationChain
+
+chain = DelegationChain(agent, redirect_uri="https://myapp.com/consent")
+consent_url = chain.get_consent_url("session-1", scopes=["profile", "documents"])
+# Redirect user to consent_url
+
+chain.handle_consent_callback("session-1", authorization_code)
+delegated_token = chain.exchange("session-1", scopes=["read:documents"])
+response = chain.request("session-1", "GET", "/api/v1/documents")
+
+For MCP server integration:
+mcp_token = agent.get_mcp_token("my-mcp-server")
+
+Rules:
+- Always call agent.authenticate() before making API calls
+- Use agent.ensure_authenticated() to auto-refresh expired tokens
+- Use environment variables for credentials in production
+- Use the Ask API (agent.ask / agent.is_allowed) for lightweight authorization checks
+
+Deprecated patterns (do not use):
+- Do not manually construct OAuth token requests; use the SDK methods
+- Do not store tokens in files; the SDK manages token lifecycle
+
+Verification:
+1. agent.authenticate() succeeds without errors
+2. agent.get_agent_info() returns the agent's identity
+3. agent.is_allowed("some_action") returns a boolean
+4. Delegation chain can generate a consent URL`} />
+
+This guide walks you through authenticating a Python backend service or AI agent with LumoAuth using the `lumoauth` Python SDK. You'll set up client credentials authentication, use the Ask API for authorization, and optionally set up delegation chains.
+
+---
+
+## Before you start
+
+You need:
+
+- A LumoAuth account with a configured tenant ([sign up](https://app.lumoauth.dev))
+- An Agent or OAuth application registered in your tenant with Client ID and Client Secret
+- Python 3.9+
+
+From your tenant portal, note your **Tenant Slug**, **Client ID**, and **Client Secret**.
+
+---
+
+## Install the SDK
+
+```bash
+pip install lumoauth
+```
+
+For cryptographic agent identity (AAuth), install with the extra:
+
+```bash
+pip install lumoauth[aauth]
+```
+
+---
+
+## Authenticate your agent
+
+The SDK uses the OAuth 2.0 client credentials flow for server-to-server authentication.
+
+```python title="agent.py"
+from lumoauth import LumoAuthAgent
+
+agent = LumoAuthAgent(
+    base_url="https://app.lumoauth.dev",
+    tenant="acme-corp",
+    client_id="your-client-id",
+    client_secret="your-client-secret",
+)
+
+# Authenticate and get an access token
+agent.authenticate(scopes=["read:users", "write:documents"])
+print(f"Authenticated. Scopes: {agent.token_scopes}")
+```
+
+You can also use environment variables instead of passing credentials directly:
+
+```bash title=".env"
+LUMOAUTH_URL=https://app.lumoauth.dev
+LUMOAUTH_TENANT=acme-corp
+AGENT_CLIENT_ID=your-client-id
+AGENT_CLIENT_SECRET=your-client-secret
+```
+
+```python
+agent = LumoAuthAgent()  # reads from environment
+agent.authenticate()
+```
+
+---
+
+## Use the Ask API
+
+The Ask API provides lightweight preflight authorization checks, designed for LLM tool-calling workflows where you need a quick allow/deny decision before executing an action.
+
+```python title="ask_api.py"
+from lumoauth import LumoAuthAgent
+
+agent = LumoAuthAgent()
+agent.authenticate()
+
+# Simple boolean check
+if agent.is_allowed("read_document", context={"document_id": "doc-123"}):
+    print("Access granted - reading document")
+else:
+    print("Access denied")
+
+# Detailed response with audit trail
+result = agent.ask("delete_user", context={"user_id": "u-456"})
+print(result)
+# {
+#   'allowed': False,
+#   'action': 'delete_user',
+#   'reason': 'insufficient_permissions',
+#   'audit_id': 'aud_abc123',
+#   'context': {'user_id': 'u-456'}
+# }
+```
+
+---
+
+## Check agent identity and capabilities
+
+```python title="capabilities.py"
+from lumoauth import LumoAuthAgent
+
+agent = LumoAuthAgent()
+agent.authenticate()
+
+# Get full agent identity
+info = agent.get_agent_info()
+print(f"Agent: {info['id']}")
+print(f"Capabilities: {info['capabilities']}")
+
+# Check for specific capability
+if agent.has_capability("web_search"):
+    print("Agent can perform web searches")
+
+# Monitor budget
+budget = agent.get_budget_status()
+print(f"Budget policy: {budget}")
+
+if agent.is_budget_exhausted():
+    print("Daily token budget reached - pausing operations")
+```
+
+---
+
+## Act on behalf of users with delegation chains
+
+Use RFC 8693 token exchange to perform actions on behalf of a user. This is useful for AI agents that need user-scoped permissions.
+
+```python title="delegation.py"
+from lumoauth import LumoAuthAgent, DelegationChain
+
+agent = LumoAuthAgent()
+agent.authenticate()
+
+chain = DelegationChain(agent, redirect_uri="https://myapp.com/consent")
+
+# Step 1: Generate a consent URL for the user
+consent_url = chain.get_consent_url(
+    "session-1",
+    scopes=["profile", "documents"],
+)
+print(f"Redirect user to: {consent_url}")
+
+# Step 2: After user grants consent, handle the callback
+chain.handle_consent_callback("session-1", authorization_code="CODE_FROM_CALLBACK")
+
+# Step 3: Exchange for a delegated token
+delegated_token = chain.exchange("session-1", scopes=["read:documents"])
+
+# Step 4: Make API calls on behalf of the user
+response = chain.request("session-1", "GET", "/api/v1/documents")
+print(response.json())
+
+# Clean up when done
+chain.revoke("session-1")
+```
+
+---
+
+## Integrate with MCP servers
+
+Exchange your agent token for an MCP server-scoped token:
+
+```python title="mcp.py"
+from lumoauth import LumoAuthAgent
+
+agent = LumoAuthAgent()
+agent.authenticate()
+
+mcp_token = agent.get_mcp_token("my-mcp-server")
+# Use mcp_token to authenticate with the MCP server
+```
+
+---
+
+## Use in a FastAPI app
+
+```python title="app.py"
+from fastapi import FastAPI, Depends, HTTPException
+from lumoauth import LumoAuthAgent
+
+app = FastAPI()
+agent = LumoAuthAgent()
+agent.authenticate()
+
+
+def check_permission(action: str):
+    def dependency():
+        agent.ensure_authenticated()
+        if not agent.is_allowed(action):
+            raise HTTPException(status_code=403, detail="Forbidden")
+    return Depends(dependency)
+
+
+@app.get("/api/documents", dependencies=[check_permission("read_documents")])
+async def list_documents():
+    return {"documents": []}
+
+
+@app.delete("/api/documents/{doc_id}", dependencies=[check_permission("delete_documents")])
+async def delete_document(doc_id: str):
+    return {"deleted": doc_id}
+```
+
+---
+
+## What's next?
+
+- [Configure agent identity](/user-guide/ai-agents/overview) in the LumoAuth tenant portal
+- [Set up ABAC policies](/user-guide/access-control/abac) for attribute-based authorization
+- [Enable audit logs](/user-guide/compliance/audit-logs) to track agent actions
+- [SDKs & Libraries](/developer/sdks) - Full SDK API reference

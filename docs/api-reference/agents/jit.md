@@ -8,7 +8,7 @@ Just-in-Time permission requests for AI agents that need elevated access.
 
         
 JIT (Just-in-Time) Permissions allow AI agents to request elevated access **only when needed**,
-            with user approval for sensitive operations. This follows the principle of least privilege—agents
+            with user approval for sensitive operations. This follows the principle of least privilege: agents
             start with minimal permissions and escalate only when necessary.
 
         > [!NOTE]

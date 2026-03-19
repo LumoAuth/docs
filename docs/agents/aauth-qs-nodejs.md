@@ -162,7 +162,7 @@ async function main() {
   const tokens = await requestAuthorization(agentToken, resourceToken);
   
   if (!tokens) {
-    console.log('User authorization required — check console for URL');
+    console.log('User authorization required - check console for URL');
     return;
   }
   
@@ -183,5 +183,5 @@ main().catch(console.error);
 
 ## Next Steps
 
-- [AAuth Protocol spec](./aauth) — full technical details
-- [AAuth Quick Start – LangChain](./aauth-qs-langchain) — embed AAuth inside a LangGraph agent
+- [AAuth Protocol spec](./aauth) - full technical details
+- [AAuth Quick Start – LangChain](./aauth-qs-langchain) - embed AAuth inside a LangGraph agent

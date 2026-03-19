@@ -1,0 +1,297 @@
+---
+sidebar_label: React
+---
+
+import CursorPrompt from '@site/src/components/CursorPrompt';
+
+# Add authentication to your React app
+
+<CursorPrompt prompt={`Set up LumoAuth authentication in a React app.
+
+Install the SDK:
+npm install @lumoauth/react
+
+Wrap the app with the provider in main.tsx or App.tsx:
+
+import { LumoAuthProvider } from '@lumoauth/react';
+
+<LumoAuthProvider
+  domain="https://app.lumoauth.dev"
+  tenantSlug="YOUR_TENANT_SLUG"
+  clientId="YOUR_CLIENT_ID"
+>
+  <App />
+</LumoAuthProvider>
+
+Create a sign-in page:
+
+import { SignIn } from '@lumoauth/react';
+export default function SignInPage() {
+  return <SignIn afterSignInUrl="/dashboard" />;
+}
+
+Create a sign-up page:
+
+import { SignUp } from '@lumoauth/react';
+export default function SignUpPage() {
+  return <SignUp afterSignUpUrl="/dashboard" />;
+}
+
+Add a callback route to handle the OAuth redirect:
+
+import { AuthCallback } from '@lumoauth/react';
+export default function CallbackPage() {
+  return <AuthCallback afterSignInUrl="/dashboard" />;
+}
+
+Use conditional rendering to protect content:
+
+import { SignedIn, SignedOut, RedirectToSignIn, UserButton } from '@lumoauth/react';
+
+function Layout() {
+  return (
+    <>
+      <SignedIn>
+        <UserButton showName />
+        <Dashboard />
+      </SignedIn>
+      <SignedOut>
+        <RedirectToSignIn />
+      </SignedOut>
+    </>
+  );
+}
+
+Use the Protect component for fine-grained access control:
+
+import { Protect } from '@lumoauth/react';
+
+<Protect permission="billing.manage" fallback={<p>No access</p>}>
+  <BillingDashboard />
+</Protect>
+
+Rules:
+- Always wrap the app root with LumoAuthProvider
+- Use SignedIn / SignedOut for layout-level auth gating
+- Use Protect for permission-based access control
+- Use useAuth() hook to access signOut, getToken, isSignedIn
+- Use useUser() hook to get the current user object
+- The AuthCallback component must be mounted on your redirect URI route
+
+Deprecated patterns (do not use):
+- Do not manually call fetch against /oauth/token; use the built-in auth flow
+- Do not store tokens in localStorage; the SDK manages token storage
+
+Verification:
+1. The app compiles without errors
+2. Unauthenticated users are redirected to sign-in
+3. After sign-in, the user sees the dashboard with UserButton
+4. The Protect component hides content when permission is denied`} />
+
+This guide walks you through adding authentication, user management, and access control to a React application using the `@lumoauth/react` SDK.
+
+---
+
+## Before you start
+
+You need:
+
+- A LumoAuth account with a configured tenant ([sign up](https://app.lumoauth.dev))
+- A registered OAuth application with a redirect URI (e.g., `http://localhost:5173/auth/callback`)
+- Node.js 18+
+
+From your tenant portal, note your **Tenant Slug** and **Client ID**.
+
+---
+
+## Install the SDK
+
+```bash
+npm install @lumoauth/react
+```
+
+---
+
+## Set up the provider
+
+Wrap your app with `LumoAuthProvider`. This makes authentication state available throughout your component tree.
+
+```tsx title="src/main.tsx"
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { LumoAuthProvider } from '@lumoauth/react';
+import App from './App';
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <LumoAuthProvider
+    domain="https://app.lumoauth.dev"
+    tenantSlug="acme-corp"
+    clientId="your-client-id"
+    redirectUri="http://localhost:5173/auth/callback"
+    afterSignInUrl="/dashboard"
+  >
+    <App />
+  </LumoAuthProvider>
+);
+```
+
+---
+
+## Add sign-in and sign-up pages
+
+The SDK provides pre-built components that handle the full authentication flow, including social login buttons when configured in your tenant.
+
+```tsx title="src/pages/SignInPage.tsx"
+import { SignIn } from '@lumoauth/react';
+
+export default function SignInPage() {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '4rem' }}>
+      <SignIn afterSignInUrl="/dashboard" signUpUrl="/sign-up" />
+    </div>
+  );
+}
+```
+
+```tsx title="src/pages/SignUpPage.tsx"
+import { SignUp } from '@lumoauth/react';
+
+export default function SignUpPage() {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '4rem' }}>
+      <SignUp afterSignUpUrl="/dashboard" signInUrl="/sign-in" />
+    </div>
+  );
+}
+```
+
+---
+
+## Handle the OAuth callback
+
+Mount `AuthCallback` on the route matching your redirect URI. It exchanges the authorization code for tokens and redirects the user.
+
+```tsx title="src/pages/CallbackPage.tsx"
+import { AuthCallback } from '@lumoauth/react';
+
+export default function CallbackPage() {
+  return (
+    <AuthCallback
+      afterSignInUrl="/dashboard"
+      loading={<p>Signing you in...</p>}
+      error={(err) => <p>Something went wrong: {err.message}</p>}
+    />
+  );
+}
+```
+
+---
+
+## Protect your routes
+
+Use `SignedIn` and `SignedOut` to conditionally render content based on authentication status.
+
+```tsx title="src/App.tsx"
+import { BrowserRouter, Routes, Route } from 'react-router';
+import { SignedIn, SignedOut, RedirectToSignIn, UserButton } from '@lumoauth/react';
+import SignInPage from './pages/SignInPage';
+import SignUpPage from './pages/SignUpPage';
+import CallbackPage from './pages/CallbackPage';
+import Dashboard from './pages/Dashboard';
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <header style={{ display: 'flex', justifyContent: 'flex-end', padding: '1rem' }}>
+        <SignedIn>
+          <UserButton showName />
+        </SignedIn>
+      </header>
+
+      <Routes>
+        <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/auth/callback" element={<CallbackPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <>
+              <SignedIn><Dashboard /></SignedIn>
+              <SignedOut><RedirectToSignIn /></SignedOut>
+            </>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+```
+
+---
+
+## Use hooks for auth state
+
+Access the current user, sign-out function, and tokens from any component.
+
+```tsx title="src/pages/Dashboard.tsx"
+import { useAuth, useUser } from '@lumoauth/react';
+
+export default function Dashboard() {
+  const { signOut, getToken } = useAuth();
+  const user = useUser();
+
+  const callApi = async () => {
+    const token = await getToken();
+    const res = await fetch('https://api.myapp.com/data', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    // handle response
+  };
+
+  return (
+    <div>
+      <h1>Welcome, {user?.displayName}</h1>
+      <p>Email: {user?.email}</p>
+      <button onClick={callApi}>Fetch Data</button>
+      <button onClick={signOut}>Sign Out</button>
+    </div>
+  );
+}
+```
+
+---
+
+## Add access control
+
+Use the `Protect` component or authorization hooks to gate features by permission, relationship, or policy.
+
+```tsx title="src/components/AdminPanel.tsx"
+import { Protect, usePermission } from '@lumoauth/react';
+
+export function AdminPanel() {
+  return (
+    <Protect permission="admin.access" fallback={<p>You don't have access to this section.</p>}>
+      <h2>Admin Panel</h2>
+      <AdminSettings />
+    </Protect>
+  );
+}
+
+export function EditButton() {
+  const { allowed, isLoading } = usePermission('documents.edit');
+
+  if (isLoading) return null;
+  if (!allowed) return null;
+
+  return <button>Edit Document</button>;
+}
+```
+
+---
+
+## What's next?
+
+- [Configure social login](/user-guide/authentication/social-login) in your tenant to show social buttons on SignIn/SignUp
+- [Set up MFA](/user-guide/authentication/mfa) for additional security
+- [Define roles and permissions](/user-guide/access-control/roles-permissions) to use with the Protect component
+- [SDKs & Libraries](/developer/sdks) - Full SDK API reference

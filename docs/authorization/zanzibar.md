@@ -70,7 +70,7 @@ Relations define the type of access or connection. Common relations include:
 | --- | --- | --- |
 | `owner` | Full control over a resource | editor, viewer |
 | `editor` | Can modify a resource | viewer |
-| `viewer` | Read-only access | — |
+| `viewer` | Read-only access | - |
 | `member` | Belongs to a group/org | viewer (of group resources) |
 | `admin` | Administrative access | owner, member |
 | `parent` | Hierarchical containment | Permission inheritance |

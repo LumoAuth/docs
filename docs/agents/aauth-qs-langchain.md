@@ -43,7 +43,7 @@ resource_token = "..."  # from your resource server
 # 3. Request authorization upfront
 tokens = aauth.request_authorization(resource_token=resource_token, scope="read write")
 if tokens.get("authorization_required"):
-    raise RuntimeError("User consent required — implement OAuth redirect flow first")
+    raise RuntimeError("User consent required - implement OAuth redirect flow first")
 
 ACCESS_TOKEN = tokens["access_token"]
 
@@ -101,5 +101,5 @@ if __name__ == "__main__":
 
 ## Next Steps
 
-- [AAuth Protocol spec](./aauth) — deep dive into the protocol
-- [JIT Permissions – LangGraph](./jit-langgraph) — add per-operation permission escalation
+- [AAuth Protocol spec](./aauth) - deep dive into the protocol
+- [JIT Permissions – LangGraph](./jit-langgraph) - add per-operation permission escalation

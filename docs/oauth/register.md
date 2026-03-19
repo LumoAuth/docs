@@ -72,7 +72,7 @@ curl -X POST https://app.lumoauth.dev/t/acme-corp/api/v1/connect/register \
 
 :::note[Store Your Secret]
 The `client_secret` is only returned once during registration. Store it
-securely — it cannot be retrieved later.
+securely - it cannot be retrieved later.
 :::
 
 

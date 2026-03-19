@@ -60,7 +60,7 @@ Include it in the `Authorization` header:
 
 ```bash
 # Check a permission
-curl -X POST https://app.lumoauth.dev/api/v1/authz/check \
+curl -X POST https://app.lumoauth.dev/t/acme-corp/api/v1/authz/check \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"permission": "document.view"}'

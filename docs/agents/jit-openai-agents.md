@@ -141,5 +141,5 @@ if __name__ == "__main__":
 
 ## Next Steps
 
-- [JIT Permissions overview](./jit) — core concepts, API reference, and best practices
-- [Agent Registry – OpenAI Agents SDK](./registry-openai-agents) — set up agent authentication first
+- [JIT Permissions overview](./jit) - core concepts, API reference, and best practices
+- [Agent Registry – OpenAI Agents SDK](./registry-openai-agents) - set up agent authentication first

@@ -96,7 +96,7 @@ try:
         "then provide a combined executive summary."
     )
 finally:
-    # Always cleanup — revokes all JIT tokens for this task
+    # Always cleanup - revokes all JIT tokens for this task
     jit.complete_task()
 ```
 
@@ -111,5 +111,5 @@ finally:
 
 ## Next Steps
 
-- [JIT Permissions overview](./jit) — core concepts, API reference, and best practices
-- [Agent Registry – Agno](./registry-agno) — set up agent authentication first
+- [JIT Permissions overview](./jit) - core concepts, API reference, and best practices
+- [Agent Registry – Agno](./registry-agno) - set up agent authentication first

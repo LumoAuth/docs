@@ -94,5 +94,5 @@ if __name__ == "__main__":
 
 ## Next Steps
 
-- [Agent Registry overview](./registry) — manage agent registrations, budgets, and capabilities
-- [AAuth Quick Start](./aauth-quickstart) — add cryptographic agent identity
+- [Agent Registry overview](./registry) - manage agent registrations, budgets, and capabilities
+- [AAuth Quick Start](./aauth-quickstart) - add cryptographic agent identity

@@ -4,7 +4,7 @@ slug: /
 
 # LumoAuth Docs
 
-Welcome to the LumoAuth API documentation. LumoAuth is the **Identity Layer for the AI Era**.
+Welcome to the LumoAuth documentation. LumoAuth is the **Identity Layer for the AI Era**.
 We provide comprehensive identity, security, and access control for AI agents, while fully supporting traditional OAuth 2.0 apps.
 
 :::note[Base URL]
@@ -14,6 +14,28 @@ All API endpoints are relative to your tenant's base URL:
 Base hostname for EU is `https://eu.app.lumoauth.dev`
 :::
 
+## New to LumoAuth?
+
+Start with the **User Guide** to understand the platform and get up and running:
+
+- [**What is LumoAuth?**](/user-guide/getting-started/overview) - Platform overview, features, and architecture
+- [**Quick Start**](/user-guide/getting-started/quick-start) - Sign up and get started in minutes
+- [**Core Concepts**](/user-guide/getting-started/concepts) - Tenants, users, roles, OAuth clients, and how they fit together
+- [**Configure Your Tenant**](/user-guide/getting-started/first-tenant) - Set up authentication and register your first application
+
+## User Guide Highlights
+
+| Section | Description |
+| --- | --- |
+| [**Authentication**](/user-guide/authentication/overview) | Email/password, social login, MFA, adaptive MFA, passkeys, enterprise SSO, device flow |
+| [**Multi-Tenancy**](/user-guide/multi-tenancy/overview) | Tenant setup, portal navigation, custom domains |
+| [**Access Control**](/user-guide/access-control/overview) | RBAC, groups, ABAC, Zanzibar, AI policy authoring |
+| [**User Management**](/user-guide/user-management/overview) | Invitations, sessions, account self-service |
+| [**Applications**](/user-guide/applications/overview) | OAuth 2.0/OIDC, SAML, signing keys |
+| [**Compliance**](/user-guide/compliance/gdpr) | GDPR, audit logs |
+| [**Integrations**](/user-guide/integrations/webhooks) | Webhooks, SCIM 2.0, email templates |
+| [**Security**](/user-guide/security/overview) | Attack protection, rate limiting, best practices |
+| [**AI Agents & MCP**](/user-guide/ai-agents/overview) | Agent identity, workload identity, MCP server integration |
 
 ## Core Concepts
 

@@ -6,7 +6,7 @@ ABAC enables fine-grained, context-aware authorization by evaluating **attribute
 
 :::note[When to Use ABAC]
 Use ABAC when access decisions depend on dynamic attributes like time of day,
-IP address, user department, or resource classification — not just static roles.
+IP address, user department, or resource classification - not just static roles.
 :::
 
 
