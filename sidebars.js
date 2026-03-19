@@ -6,10 +6,15 @@ const sidebars = {
       id: 'index',
       label: 'Introduction',
     },
+    // ── Quickstarts ──
     {
-      type: 'doc',
-      id: 'quickstart',
-      label: 'Quickstart',
+      type: 'category',
+      label: 'Quickstarts',
+      collapsible: false,
+      items: [
+        { type: 'doc', id: 'quickstarts/app-security', label: 'Enable SSO, Auth & AuthZ for My App' },
+        { type: 'doc', id: 'quickstarts/ai-agent-security', label: 'Enable Security for AI Agents' },
+      ],
     },
     // ── User Guide ──
     {
@@ -34,6 +39,7 @@ const sidebars = {
           link: { type: 'doc', id: 'user-guide/authentication/overview' },
           items: [
             { type: 'doc', id: 'user-guide/authentication/email-password', label: 'Email & Password' },
+            { type: 'doc', id: 'user-guide/authentication/magic-link', label: 'Magic Link & Email-First' },
             { type: 'doc', id: 'user-guide/authentication/social-login', label: 'Social Login' },
             { type: 'doc', id: 'user-guide/authentication/mfa', label: 'Multi-Factor Authentication' },
             { type: 'doc', id: 'user-guide/authentication/adaptive-mfa', label: 'Adaptive MFA' },

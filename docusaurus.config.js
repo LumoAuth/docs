@@ -16,6 +16,10 @@ const config = {
   onBrokenLinks: 'throw',
   onBrokenAnchors: 'warn',
 
+  clientModules: [
+    require.resolve('./src/clientModules/clipboardPolyfill.js'),
+  ],
+
   markdown: {
     mermaid: true,
     hooks: {
@@ -58,6 +62,7 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
+        style: 'dark',
         title: 'LumoAuth',
         logo: {
           alt: 'LumoAuth',
@@ -79,8 +84,8 @@ const config = {
         copyright: `© ${new Date().getFullYear()} LumoAuth LLC. All rights reserved.`,
       },
       prism: {
-        theme: require('prism-react-renderer').themes.github,
-        darkTheme: require('prism-react-renderer').themes.dracula,
+        theme: require('prism-react-renderer').themes.vsDark,
+        darkTheme: require('prism-react-renderer').themes.vsDark,
         additionalLanguages: ['bash', 'json', 'python', 'php', 'java'],
       },
       algolia: {
@@ -103,7 +108,22 @@ const config = {
           enableLlmsFullTxt: true
         }
       }
-    ]
+    ],
+    function ignoreVscodeWarnings() {
+      return {
+        name: 'ignore-vscode-languageserver-warnings',
+        configureWebpack() {
+          return {
+            ignoreWarnings: [
+              {
+                module: /vscode-languageserver-types/,
+                message: /Critical dependency/,
+              },
+            ],
+          };
+        },
+      };
+    },
   ],
 };
 

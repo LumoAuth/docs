@@ -224,6 +224,103 @@ function Dashboard() {
 }
 ```
 
+### Magic Link & Email-First
+
+Send passwordless magic-link emails and implement email-first login flows using purpose-built hooks.
+
+#### `useMagicLink()`
+
+```tsx
+import { useMagicLink } from '@lumoauth/react';
+
+function MagicLinkForm() {
+  const [email, setEmail] = useState('');
+  const { sendMagicLink, isLoading, isSent, error, reset } = useMagicLink();
+
+  if (isSent) {
+    return (
+      <div>
+        <p>Check your inbox — we sent a link to <strong>{email}</strong>.</p>
+        <button onClick={reset}>Use a different email</button>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={(e) => { e.preventDefault(); sendMagicLink(email); }}>
+      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Sending…' : 'Send sign-in link'}
+      </button>
+      {error && <p>{error}</p>}
+    </form>
+  );
+}
+```
+
+| Return | Type | Description |
+|--------|------|-------------|
+| `sendMagicLink` | `(email, redirectUri?) => Promise<void>` | Send the magic link |
+| `isLoading` | `boolean` | True while the request is in-flight |
+| `isSent` | `boolean` | True after a successful request |
+| `error` | `string \| null` | Error message if the request failed |
+| `reset` | `() => void` | Reset back to idle |
+
+#### `useEmailFirst()`
+
+Check whether an account exists for a given email before revealing the next step:
+
+```tsx
+import { useEmailFirst } from '@lumoauth/react';
+
+function EmailStep({ onKnownUser, onNewUser }) {
+  const [email, setEmail] = useState('');
+  const { checkEmail, isLoading } = useEmailFirst();
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const exists = await checkEmail(email);
+    exists ? onKnownUser(email) : onNewUser(email);
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? 'Checking…' : 'Continue'}
+      </button>
+    </form>
+  );
+}
+```
+
+| Return | Type | Description |
+|--------|------|-------------|
+| `checkEmail` | `(email) => Promise<boolean>` | Returns `true` if account exists |
+| `isLoading` | `boolean` | True while the check is in-flight |
+| `exists` | `boolean \| null` | Result of last check (`null` = not yet checked) |
+| `reset` | `() => void` | Reset state back to idle |
+
+You can also call the `AuthModule` directly for non-React environments:
+
+```typescript
+import { AuthModule } from '@lumoauth/sdk';
+
+const auth = new AuthModule({
+  baseUrl: 'https://app.lumoauth.dev',
+  tenantSlug: 'acme-corp',
+  clientId: 'your-client-id',
+});
+
+// Send a magic link
+await auth.requestMagicLink({ email: 'user@example.com' });
+
+// Email-first check
+const { exists } = await auth.checkEmailExists('user@example.com');
+```
+
+See the [Magic Link & Email-First guide](../user-guide/authentication/magic-link.md) for full configuration details.
+
 ### Theming
 
 ```tsx

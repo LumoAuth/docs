@@ -1,30 +1,621 @@
 /**
- * Custom CSS for LumoAuth Docs (Docusaurus)
+ * LumoAuth Documentation Theme
+ * Modern, premium design inspired by Clerk and Auth0 docs
  */
 
-/* Import Inter font */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap');
+/* === Fonts === */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;1,400&display=swap');
 
+/* === Light Mode Design Tokens === */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-font-family-base: 'Inter', system-ui, -apple-system, sans-serif;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  /* Brand: rich purple */
+  --ifm-color-primary: #6c47ff;
+  --ifm-color-primary-dark: #5535e8;
+  --ifm-color-primary-darker: #4d2fe0;
+  --ifm-color-primary-darkest: #3c22c8;
+  --ifm-color-primary-light: #7d5cff;
+  --ifm-color-primary-lighter: #8a69ff;
+  --ifm-color-primary-lightest: #a891ff;
+
+  /* Typography */
+  --ifm-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  --ifm-font-family-monospace: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, monospace;
+  --ifm-font-size-base: 15px;
+  --ifm-line-height-base: 1.7;
+  --ifm-heading-font-weight: 650;
+  --ifm-h1-font-size: 2.2rem;
+  --ifm-h2-font-size: 1.375rem;
+  --ifm-h3-font-size: 1.125rem;
+  --ifm-h4-font-size: 0.975rem;
+  --ifm-h5-font-size: 0.875rem;
+
+  /* Layout */
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #f7f7fb;
+  --ifm-global-radius: 8px;
+  --ifm-button-border-radius: 8px;
+  --ifm-pagination-nav-border-radius: 10px;
+
+  /* Borders / emphasis scale */
+  --ifm-color-emphasis-100: #f3f3f8;
+  --ifm-color-emphasis-200: #e6e6f0;
+  --ifm-color-emphasis-300: #d0d0de;
+  --ifm-color-emphasis-400: #b4b4cb;
+  --ifm-color-emphasis-600: #6e6e8a;
+  --ifm-color-emphasis-700: #44445a;
+  --ifm-color-emphasis-800: #2a2a38;
+  --ifm-color-emphasis-900: #14141c;
+
+  /* Navbar — always dark (premium branded header) */
+  --ifm-navbar-background-color: #0e0e16;
+  --ifm-navbar-shadow: none;
+  --ifm-navbar-height: 60px;
+  --ifm-navbar-padding-horizontal: 1.5rem;
+
+  /* Sidebar */
+  --ifm-sidebar-width: 272px;
+  --doc-sidebar-width: 272px;
+  --ifm-menu-color: #52526e;
+  --ifm-menu-color-active: #6c47ff;
+  --ifm-menu-color-background-active: rgba(108, 71, 255, 0.09);
+  --ifm-menu-color-background-hover: rgba(0, 0, 0, 0.04);
+  --ifm-menu-link-padding-horizontal: 0.75rem;
+  --ifm-menu-link-padding-vertical: 0.35rem;
+
+  /* Code */
+  --ifm-code-font-size: 0.85em;
+  --ifm-code-background: #efeff8;
+  --ifm-code-border-radius: 4px;
+  --docusaurus-highlighted-code-line-bg: rgba(108, 71, 255, 0.1);
+
+  /* Links */
+  --ifm-link-color: #6c47ff;
+  --ifm-link-hover-color: #5535e8;
+  --ifm-link-decoration: none;
+
+  /* TOC */
+  --ifm-toc-border-color: var(--ifm-color-emphasis-200);
+  --ifm-toc-link-color: var(--ifm-color-emphasis-600);
 }
 
+/* === Dark Mode Tokens === */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: #9b82ff;
+  --ifm-color-primary-dark: #856aff;
+  --ifm-color-primary-darker: #7455ff;
+  --ifm-color-primary-darkest: #6c47ff;
+  --ifm-color-primary-light: #b3a0ff;
+  --ifm-color-primary-lighter: #c4b3ff;
+  --ifm-color-primary-lightest: #d9ccff;
+
+  --ifm-background-color: #0c0c14;
+  --ifm-background-surface-color: #13131e;
+
+  --ifm-navbar-background-color: #09090f;
+  --ifm-navbar-shadow: 0 1px 0 0 rgba(255, 255, 255, 0.06);
+
+  --ifm-color-emphasis-100: #13131e;
+  --ifm-color-emphasis-200: #1c1c2c;
+  --ifm-color-emphasis-300: #252538;
+  --ifm-color-emphasis-400: #32324a;
+  --ifm-color-emphasis-600: #7a7a9a;
+  --ifm-color-emphasis-700: #a0a0c0;
+  --ifm-color-emphasis-800: #c8c8e0;
+  --ifm-color-emphasis-900: #e8e8f4;
+
+  --ifm-menu-color: #8080a8;
+  --ifm-menu-color-active: #b0a0ff;
+  --ifm-menu-color-background-active: rgba(155, 130, 255, 0.1);
+  --ifm-menu-color-background-hover: rgba(255, 255, 255, 0.04);
+
+  --ifm-code-background: #1c1c2c;
+  --ifm-link-color: #9b82ff;
+  --ifm-link-hover-color: #b3a0ff;
+  --docusaurus-highlighted-code-line-bg: rgba(155, 130, 255, 0.12);
+}
+
+/* === Base === */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* === Navbar === */
+.navbar {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: none;
+}
+
+.navbar__brand {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.navbar__title {
+  color: #ffffff !important;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.navbar__link {
+  color: rgba(255, 255, 255, 0.72) !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.1s ease;
+}
+
+.navbar__link:hover,
+.navbar__link--active {
+  color: #ffffff !important;
+}
+
+/* Dark-mode hamburger always shows on dark bg */
+.navbar__toggle {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* === Sidebar === */
+.theme-doc-sidebar-container {
+  border-right: 1px solid var(--ifm-color-emphasis-200) !important;
+}
+
+.theme-doc-sidebar-menu {
+  padding: 0.75rem 0 1.5rem;
+}
+
+.menu__link {
+  font-size: 0.875rem;
+  border-radius: 6px;
+  font-weight: 450;
+  color: var(--ifm-menu-color);
+  letter-spacing: -0.01em;
+  transition: background 0.1s ease, color 0.1s ease;
+}
+
+.menu__link:hover {
+  background: var(--ifm-menu-color-background-hover);
+  color: var(--ifm-color-emphasis-900);
+  text-decoration: none;
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  color: var(--ifm-color-primary) !important;
+  background: var(--ifm-menu-color-background-active) !important;
+  font-weight: 500;
+}
+
+/* Category / section labels */
+.menu__list-item-collapsible > .menu__link--sublist,
+.menu__link--sublist-caret {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.065em;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.menu__caret::before,
+.menu__link--sublist-caret::after {
+  opacity: 0.45;
+}
+
+/* === Content headings === */
+.markdown h1 {
+  font-size: 2.2rem !important;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  margin-bottom: 1.75rem;
+}
+
+.markdown h2 {
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-top: 2.75rem;
+}
+
+.markdown h3 {
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.4;
+}
+
+.markdown h4 {
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-800);
+}
+
+/* Lead / first paragraph */
+.markdown > p:first-of-type {
+  font-size: 1.0625rem;
+  color: var(--ifm-color-emphasis-600);
+  line-height: 1.8;
+}
+
+/* Links in content */
+.markdown a:not(.pagination-nav__link):not(.card):not(.hash-link) {
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.markdown a:not(.pagination-nav__link):not(.card):not(.hash-link):hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* === Inline code === */
+code:not(pre code) {
+  padding: 0.15em 0.45em;
+  border-radius: var(--ifm-code-border-radius);
+  font-size: var(--ifm-code-font-size);
+  font-weight: 400;
+  background: var(--ifm-code-background);
+  vertical-align: baseline;
+  border: none;
+}
+
+/* === Code blocks (dark even in light mode) === */
+div[class*='codeBlockContainer'] {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.07);
+  margin: 1.5rem 0;
+}
+
+[data-theme='dark'] div[class*='codeBlockContainer'] {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.prism-code {
+  font-size: 0.84rem;
+  line-height: 1.65;
+  border-radius: 0 !important;
+}
+
+div[class*='codeBlockTitle'] {
+  background: #1e1e2e !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  color: rgba(255, 255, 255, 0.45) !important;
+  font-family: var(--ifm-font-family-monospace);
+  padding: 0.55rem 1rem;
+}
+
+/* === Tables === */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  margin: 1.5rem 0;
+}
+
+thead tr {
+  background: var(--ifm-background-surface-color);
+  border-bottom: 2px solid var(--ifm-color-emphasis-200);
+}
+
+thead th {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+  color: var(--ifm-color-emphasis-600);
+  padding: 0.65rem 1rem;
+  text-align: left;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: var(--ifm-background-surface-color);
+}
+
+tbody td {
+  padding: 0.6rem 1rem;
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+/* === Admonitions === */
+.admonition {
+  border-radius: 8px;
+  border-left-width: 3px;
+  border-top-width: 0;
+  border-right-width: 0;
+  border-bottom-width: 0;
+  padding: 0.875rem 1rem 0.875rem 1.25rem;
+  font-size: 0.9rem;
+  margin: 1.5rem 0;
+}
+
+.admonition-heading h5 {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.admonition-note {
+  background: rgba(99, 102, 241, 0.07);
+  border-left-color: #6366f1;
+}
+
+.admonition-note .admonition-heading h5 {
+  color: #5255c9;
+}
+
+[data-theme='dark'] .admonition-note .admonition-heading h5 {
+  color: #9b9ef8;
+}
+
+.admonition-tip {
+  background: rgba(16, 185, 129, 0.07);
+  border-left-color: #10b981;
+}
+
+.admonition-tip .admonition-heading h5 {
+  color: #0d9468;
+}
+
+[data-theme='dark'] .admonition-tip .admonition-heading h5 {
+  color: #34d399;
+}
+
+.admonition-info {
+  background: rgba(14, 165, 233, 0.07);
+  border-left-color: #0ea5e9;
+}
+
+.admonition-info .admonition-heading h5 {
+  color: #0284c7;
+}
+
+[data-theme='dark'] .admonition-info .admonition-heading h5 {
+  color: #38bdf8;
+}
+
+.admonition-warning,
+.admonition-caution {
+  background: rgba(245, 158, 11, 0.07);
+  border-left-color: #f59e0b;
+}
+
+.admonition-warning .admonition-heading h5,
+.admonition-caution .admonition-heading h5 {
+  color: #b45309;
+}
+
+[data-theme='dark'] .admonition-warning .admonition-heading h5,
+[data-theme='dark'] .admonition-caution .admonition-heading h5 {
+  color: #fbbf24;
+}
+
+.admonition-danger {
+  background: rgba(239, 68, 68, 0.07);
+  border-left-color: #ef4444;
+}
+
+.admonition-danger .admonition-heading h5 {
+  color: #dc2626;
+}
+
+[data-theme='dark'] .admonition-danger .admonition-heading h5 {
+  color: #f87171;
+}
+
+/* === Table of Contents (right sidebar) === */
+.table-of-contents {
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+
+.table-of-contents::before {
+  content: 'On this page';
+  display: block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-weight: 700;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 0.6rem;
+}
+
+.table-of-contents__link {
+  color: var(--ifm-toc-link-color);
+  font-weight: 400;
+  transition: color 0.1s ease;
+}
+
+.table-of-contents__link:hover,
+.table-of-contents__link--active {
+  color: var(--ifm-color-primary);
+  font-weight: 500;
+}
+
+/* === Pagination nav === */
+.pagination-nav__link {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-pagination-nav-border-radius);
+  padding: 1rem 1.25rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 0 0 2px rgba(108, 71, 255, 0.15);
+  text-decoration: none;
+}
+
+.pagination-nav__label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.pagination-nav__sublabel {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+/* === Breadcrumbs === */
+.breadcrumbs {
+  font-size: 0.8rem;
+}
+
+.breadcrumbs__link {
+  font-weight: 450;
+}
+
+.breadcrumbs__item--active .breadcrumbs__link {
+  color: var(--ifm-color-emphasis-700);
+  font-weight: 500;
+}
+
+/* === Footer === */
+.footer {
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.footer--dark {
+  background: #09090f;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.footer__title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.3) !important;
+  margin-bottom: 0.75rem;
+}
+
+.footer__link-item {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+  font-weight: 450;
+  transition: color 0.1s ease;
+}
+
+.footer__link-item:hover {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+}
+
+/* === Cards (used on landing / overview pages) === */
+.card {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 10px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.card:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 4px 20px rgba(108, 71, 255, 0.1);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+[data-theme='dark'] .card:hover {
+  box-shadow: 0 4px 20px rgba(155, 130, 255, 0.15);
+}
+
+/* === Horizontal rule === */
+hr {
+  border: none;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  margin: 2.5rem 0;
+}
+
+/* === Anchor links === */
+.hash-link {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+h1:hover .hash-link,
+h2:hover .hash-link,
+h3:hover .hash-link,
+h4:hover .hash-link {
+  opacity: 0.45;
+}
+
+/* === Scrollbars === */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ifm-color-emphasis-300);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ifm-color-emphasis-400);
+}
+
+/* === DocSearch (Algolia) === */
+.DocSearch-Button {
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+  transition: background 0.1s ease, border-color 0.1s ease !important;
+}
+
+.DocSearch-Button:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: none !important;
+}
+
+.DocSearch-Button-Key {
+  background: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: none !important;
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.DocSearch-Button-Placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 0.875rem !important;
+}
+
+/* === Badges === */
+.badge {
+  font-weight: 600;
+  font-size: 0.68rem;
+  letter-spacing: 0.045em;
+  border-radius: 6px;
+  padding: 0.2em 0.6em;
+}
+
+/* === Mermaid diagrams === */
+.docusaurus-mermaid-container {
+  margin: 1.5rem 0;
 }

@@ -9,6 +9,7 @@ LumoAuth supports a wide range of authentication methods to meet the needs of co
 | Method | Description | Best For |
 |--------|-------------|----------|
 | [Email & Password](email-password.md) | Traditional credential-based login | All applications |
+| [Magic Link & Email-First](magic-link.md) | Passwordless sign-in via emailed link; optional email-first flow | Consumer apps, low-friction login |
 | [Social Login](social-login.md) | OAuth-based login via external providers | Consumer apps |
 | [Multi-Factor Authentication](mfa.md) | Second factor verification (TOTP, SMS, email) | Security-sensitive apps |
 | [Adaptive MFA](adaptive-mfa.md) | Risk-based, context-aware MFA | Reducing friction while maintaining security |
