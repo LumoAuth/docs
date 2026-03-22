@@ -13,13 +13,19 @@ SCIM enables automatic user lifecycle management:
 - **Sync** - Keep user attributes in sync between your IdP and LumoAuth
 - **Group sync** - Synchronize group memberships
 
-```
-HR System / IdP                    LumoAuth
-┌────────────┐   SCIM 2.0 API    ┌──────────┐
-│  Okta      │ ───────────────►  │  Tenant  │
-│  Azure AD  │   Create/Update/  │  Users   │
-│  OneLogin  │   Delete Users    │  Groups  │
-└────────────┘                    └──────────┘
+```mermaid
+flowchart LR
+    subgraph IdP["HR System / IdP"]
+        Okta["Okta"]
+        AzureAD["Azure AD"]
+        OneLogin["OneLogin"]
+    end
+    subgraph LumoAuth["LumoAuth"]
+        T["Tenant"]
+        U["Users"]
+        G["Groups"]
+    end
+    IdP -->|"SCIM 2.0 API\nCreate/Update/Delete Users"| LumoAuth
 ```
 
 ---

@@ -105,8 +105,12 @@ MCP is a protocol that allows AI models to interact with external tools and data
 
 ### MCP Authentication Flow
 
-```
-AI Agent → LumoAuth (authenticate) → Receives token → MCP Server (with token)
+```mermaid
+flowchart LR
+    Agent["AI Agent"] -->|"authenticate"| LumoAuth["LumoAuth"]
+    LumoAuth -->|"issues token"| Agent
+    Agent -->|"presents token"| MCP["MCP Server"]
+    MCP -->|"validates token"| LumoAuth
 ```
 
 1. Agent authenticates with LumoAuth
@@ -129,11 +133,15 @@ Agents can be assigned:
 
 Grant agents only the minimum permissions needed:
 
-```
-Agent: data-processor
-├── Scope: data:read (can read data)
-├── Scope: data:transform (can process data)
-└── ❌ data:delete (cannot delete data)
+```mermaid
+graph TD
+    Agent["Agent: data-processor"]
+    Agent --> S1["✅ Scope: data:read\n(can read data)"]
+    Agent --> S2["✅ Scope: data:transform\n(can process data)"]
+    Agent --> S3["❌ data:delete\n(cannot delete data)"]
+    style S3 fill:#ffebee,stroke:#f44336
+    style S1 fill:#e8f5e9,stroke:#4caf50
+    style S2 fill:#e8f5e9,stroke:#4caf50
 ```
 
 ---

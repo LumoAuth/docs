@@ -82,23 +82,23 @@ client ID, secret, and configuration for redirect URIs and allowed scopes.
 
 ### Resource Hierarchy
 
-```
-// Organization Structure
-Tenant (acme-corp)
-├── Users
-│   ├── john@acme.com
-│   └── jane@acme.com
-├── Groups
-│   ├── engineering
-│   └── sales
-├── Roles
-│   ├── admin
-│   └── viewer
-├── OAuth Clients
-│   ├── web-app
-│   └── mobile-app
-└── Policies
-    └── resource-access
+```mermaid
+graph TD
+    Tenant["Tenant (acme-corp)"]
+    Tenant --> Users
+    Users --> U1["john@acme.com"]
+    Users --> U2["jane@acme.com"]
+    Tenant --> Groups
+    Groups --> G1["engineering"]
+    Groups --> G2["sales"]
+    Tenant --> Roles
+    Roles --> R1["admin"]
+    Roles --> R2["viewer"]
+    Tenant --> OAuthClients["OAuth Clients"]
+    OAuthClients --> O1["web-app"]
+    OAuthClients --> O2["mobile-app"]
+    Tenant --> Policies
+    Policies --> P1["resource-access"]
 ```
 
 ## API Categories

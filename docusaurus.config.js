@@ -66,10 +66,8 @@ const config = {
         title: 'LumoAuth',
         logo: {
           alt: 'LumoAuth',
-          src: 'img/lumo-light.png',
-          srcDark: 'img/lumo-dark.png',
+          src: 'img/lumo-logo.png',
           width: 32,
-          height: 32,
         },
         items: [
           {

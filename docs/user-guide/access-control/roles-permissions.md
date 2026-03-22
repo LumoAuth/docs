@@ -36,17 +36,18 @@ A **role** is a named collection of permissions:
 
 Users can be assigned one or more roles. Their effective permissions are the union of all permissions from all assigned roles.
 
-```
-User: alice@acme.com
-  ├── Role: editor
-  │   ├── users:read
-  │   ├── users:write
-  │   └── applications:read
-  └── Role: auditor
-      ├── audit-logs:read
-      └── users:read  (duplicate - counted once)
-
-Effective permissions: users:read, users:write, applications:read, audit-logs:read
+```mermaid
+graph TD
+    U["User: alice@acme.com"]
+    U --> E["Role: editor"]
+    U --> A["Role: auditor"]
+    E --> E1["users:read"]
+    E --> E2["users:write"]
+    E --> E3["applications:read"]
+    A --> A1["audit-logs:read"]
+    A --> A2["users:read (duplicate — counted once)"]
+    E1 & E2 & E3 & A1 --> EFF["Effective: users:read, users:write,<br/>applications:read, audit-logs:read"]
+    style EFF fill:#e8f5e9,stroke:#4caf50
 ```
 
 ---

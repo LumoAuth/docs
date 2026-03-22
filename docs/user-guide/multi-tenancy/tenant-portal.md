@@ -113,33 +113,34 @@ See [AI Agents](../ai-agents/overview.md) for details.
 
 The portal sidebar organizes all sections:
 
-```
-📊 Dashboard
-📱 Applications
-👥 Access Management
-   ├── Users
-   ├── Roles
-   ├── Groups
-   ├── Permissions
-   ├── Zanzibar
-   ├── ABAC
-   ├── Policy Author
-   └── Permission Tester
-⚙️  Configuration
-   ├── Auth Settings
-   ├── Social Login
-   ├── SAML IdP
-   ├── OIDC IdP
-   ├── LDAP
-   ├── Email Templates
-   ├── Webhooks
-   └── Adaptive Auth
-🔐 Signing Keys
-🌐 Custom Domains
-📋 Audit Logs
-🛡️  GDPR
-📈 Observability
-🤖 AI Agents
+```mermaid
+graph TD
+    Dashboard["📊 Dashboard"]
+    Apps["📱 Applications"]
+    Access["👥 Access Management"]
+    Access --> Users["Users"]
+    Access --> Roles["Roles"]
+    Access --> Groups["Groups"]
+    Access --> Permissions["Permissions"]
+    Access --> Zanzibar["Zanzibar"]
+    Access --> ABAC["ABAC"]
+    Access --> PolicyAuthor["Policy Author"]
+    Access --> PermTester["Permission Tester"]
+    Config["⚙️ Configuration"]
+    Config --> AuthSettings["Auth Settings"]
+    Config --> SocialLogin["Social Login"]
+    Config --> SAMLIdP["SAML IdP"]
+    Config --> OIDCIdP["OIDC IdP"]
+    Config --> LDAP["LDAP"]
+    Config --> EmailTemplates["Email Templates"]
+    Config --> Webhooks["Webhooks"]
+    Config --> AdaptiveAuth["Adaptive Auth"]
+    SigningKeys["🔐 Signing Keys"]
+    CustomDomains["🌐 Custom Domains"]
+    AuditLogs["📋 Audit Logs"]
+    GDPR["🛡️ GDPR"]
+    Observability["📈 Observability"]
+    AIAgents["🤖 AI Agents"]
 ```
 
 ---

@@ -18,21 +18,15 @@ LumoAuth provides multiple authorization models that can be used independently o
 
 ## How They Work Together
 
-```
-User Request
-    │
-    ▼
-┌─────────────┐    ┌──────────────┐    ┌──────────────┐
-│   RBAC      │    │    ABAC      │    │   Zanzibar   │
-│  Role check │    │  Attribute   │    │ Relationship  │
-│             │    │  evaluation  │    │   check      │
-└──────┬──────┘    └──────┬───────┘    └──────┬───────┘
-       │                  │                    │
-       ▼                  ▼                    ▼
-   ┌──────────────────────────────────────────────┐
-   │            Combined Access Decision           │
-   │     (configurable: AND / OR / first-match)    │
-   └──────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    Req["User Request"]
+    Req --> RBAC["RBAC\nRole check"]
+    Req --> ABAC["ABAC\nAttribute evaluation"]
+    Req --> Zanzibar["Zanzibar\nRelationship check"]
+    RBAC --> Decision["Combined Access Decision\n(configurable: AND / OR / first-match)"]
+    ABAC --> Decision
+    Zanzibar --> Decision
 ```
 
 You can use one model or layer them. For example:
@@ -74,16 +68,17 @@ The permission tester lets you:
 
 All access control features are managed under:
 
-```
-/t/{tenantSlug}/portal/access-management/
-├── users              # User management with role assignments
-├── roles              # RBAC role definitions
-├── groups             # Group management
-├── permissions        # Permission definitions
-├── zanzibar           # Zanzibar relationship tuples
-├── abac               # ABAC policy rules
-├── policy-author      # AI-assisted policy creation
-└── permission-tester  # Test access decisions
+```mermaid
+graph TD
+    Root["/t/{tenantSlug}/portal/access-management/"]
+    Root --> U["users — User management with role assignments"]
+    Root --> R["roles — RBAC role definitions"]
+    Root --> G["groups — Group management"]
+    Root --> P["permissions — Permission definitions"]
+    Root --> Z["zanzibar — Zanzibar relationship tuples"]
+    Root --> AB["abac — ABAC policy rules"]
+    Root --> PA["policy-author — AI-assisted policy creation"]
+    Root --> PT["permission-tester — Test access decisions"]
 ```
 
 ---

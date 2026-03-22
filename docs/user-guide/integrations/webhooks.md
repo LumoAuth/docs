@@ -6,17 +6,12 @@ Webhooks allow LumoAuth to notify your applications in real-time when events occ
 
 ## How Webhooks Work
 
-```
-Event occurs in LumoAuth
-       │
-       ▼
-LumoAuth sends HTTP POST to your webhook URL
-       │
-       ▼
-Your server processes the event
-       │
-       ▼
-Returns 2xx to acknowledge receipt
+```mermaid
+flowchart TD
+    E["Event occurs in LumoAuth"]
+    E --> P["LumoAuth sends HTTP POST to your webhook URL"]
+    P --> S["Your server processes the event"]
+    S --> A["Returns 2xx to acknowledge receipt"]
 ```
 
 LumoAuth sends a JSON payload to your configured endpoint for each subscribed event.

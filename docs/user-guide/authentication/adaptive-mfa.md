@@ -33,29 +33,18 @@ The risk engine analyzes multiple signals:
 
 ### Decision Flow
 
-```
-Login Attempt
-     │
-     ▼
-┌─────────────────────┐
-│  Collect Risk Signals│
-│  (device, IP, geo,  │
-│   behavior, etc.)   │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│  Calculate Risk Score│
-│  (0-100)            │
-└──────────┬──────────┘
-           │
-     ┌─────┴──────┐
-     │             │
-  Score ≤ 30    31-70     71+
-     │             │       │
-     ▼             ▼       ▼
-  ✅ Allow     🔐 MFA    🚫 Block
-  (no MFA)   Challenge   + Alert
+```mermaid
+flowchart TD
+    Login["Login Attempt"]
+    Login --> Collect["Collect Risk Signals\n(device, IP, geo, behavior, etc.)"]
+    Collect --> Score["Calculate Risk Score (0-100)"]
+    Score --> D{"Risk Level?"}
+    D -->|"Score ≤ 30"| Allow["✅ Allow\n(no MFA)"]
+    D -->|"31–70"| MFA["🔐 MFA Challenge"]
+    D -->|"71+"| Block["🚫 Block + Alert"]
+    style Allow fill:#e8f5e9,stroke:#4caf50
+    style MFA fill:#fff3e0,stroke:#ff9800
+    style Block fill:#ffebee,stroke:#f44336
 ```
 
 ---

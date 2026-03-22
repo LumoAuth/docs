@@ -13,29 +13,18 @@ The Device Authorization Flow (RFC 8628) enables authentication on input-constra
 5. **Device polls for tokens** - The device periodically checks if the user has completed authentication
 6. **Tokens issued** - Once the user authorizes, the device receives access and refresh tokens
 
-```
-┌──────────┐                          ┌──────────┐
-│  Device   │                          │  User's  │
-│  (CLI/TV) │                          │  Phone   │
-└─────┬────┘                          └─────┬────┘
-      │                                      │
-      │ 1. POST /device_authorization        │
-      │────────────────────────►             │
-      │                                      │
-      │ ◄──── device_code + user_code        │
-      │                                      │
-      │ 2. Display: "Go to URL,              │
-      │    enter code: ABCD-1234"            │
-      │                                      │
-      │                              3. User opens URL
-      │                                 enters code
-      │                                 logs in
-      │                                      │
-      │ 4. Poll POST /token                  │
-      │────────────────────────►             │
-      │                                      │
-      │ ◄──── access_token + refresh_token   │
-      │                                      │
+```mermaid
+sequenceDiagram
+    participant D as Device (CLI/TV)
+    participant AS as Auth Server
+    participant U as User's Phone
+
+    D->>AS: 1. POST /device_authorization
+    AS-->>D: device_code + user_code
+    Note over D: 2. Display: "Go to URL,<br/>enter code: ABCD-1234"
+    U->>AS: 3. Opens URL, enters code, logs in
+    D->>AS: 4. Poll POST /token
+    AS-->>D: access_token + refresh_token
 ```
 
 ---

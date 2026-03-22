@@ -291,6 +291,7 @@ div[class*='codeBlockTitle'] {
 /* === Tables === */
 table {
   border-collapse: collapse;
+  display: table;
   width: 100%;
   font-size: 0.875rem;
   border-radius: 8px;

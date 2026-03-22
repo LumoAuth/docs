@@ -127,15 +127,13 @@ Configure at:
 
 Map LDAP attributes to LumoAuth user profile fields:
 
-```
-LDAP Attribute        → LumoAuth Field
-─────────────────────────────────────────
-mail                  → email
-displayName           → name
-sAMAccountName        → username
-memberOf              → groups
-telephoneNumber       → phone
-```
+| LDAP Attribute | LumoAuth Field |
+|---|---|
+| `mail` | `email` |
+| `displayName` | `name` |
+| `sAMAccountName` | `username` |
+| `memberOf` | `groups` |
+| `telephoneNumber` | `phone` |
 
 ### JIT Provisioning from LDAP
 

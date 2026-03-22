@@ -81,31 +81,20 @@ The attacker cannot exchange the code because they don't possess the secret `cod
                     
                 
                 
+```mermaid
+flowchart TB
+    subgraph Device["End Device"]
+        LegitApp["Legit App"]
+        Browser["OS / Browser"]
+        MalApp["Malicious App"]
+        LegitApp -->|"① Auth Request"| Browser
+        Browser -->|"④ Intercept Code"| MalApp
+    end
+    Browser -->|"② Auth Request"| AuthServer["Authorization Server"]
+    AuthServer -->|"③ Auth Code"| Browser
 ```
-┌─────────────────────────────────────────┐
-│            End Device                    │
-│                                         │
-│  ┌─────────┐      ┌──────────────┐     │
-│  │Legit App│      │ Malicious App│     │
-│  └────┬────┘      └──────┬───────┘     │
-│       │                  ▲              │
-│       │ (1) Auth    (4) Intercept       │
-│       │ Request         Code            │
-│       ▼                  │              │
-│  ┌────────────────────────────────┐     │
-│  │     OS / Browser                │     │
-│  └────────────────────────────────┘     │
-└─────────────────────────────────────────┘
-        │                          ▲
-   (2) Auth Request           (3) Auth Code
-        ▼                          │
-┌─────────────────────────────────────────┐
-│        Authorization Server              │
-└─────────────────────────────────────────┘
 
-PKCE Solution: Only the app with the 
-secret code_verifier can exchange the code.
-```
+> **PKCE Solution:** Only the app with the secret `code_verifier` can exchange the code.
 
             
         
@@ -173,28 +162,15 @@ Transform the verifier using S256 (recommended) or plain:
                     
                 
                 
-```
-┌────────┐                    ┌───────────────┐
-│ Client │                    │ Auth Server   │
-└───┬────┘                    └───────┬───────┘
-    │                                 │
-    │ (A) Authorization Request        │
-    │ + code_challenge                │
-    │ + code_challenge_method         │
-    │────────────────────────────────>│
-    │                                 │
-    │ (B) Authorization Code           │
-    │(C) Token Request                │
-    │ + code                          │
-    │ + code_verifier                 │
-    │────────────────────────────────>│
-    │                                 │
-    │         Server verifies:        │
-    │   SHA256(verifier) == challenge │
-    │                                 │
-    │ (D) Access Token                 │
-    │<────────────────────────────────│
-    │                                 │
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant AS as Auth Server
+    C->>AS: (A) Authorization Request<br/>+ code_challenge<br/>+ code_challenge_method
+    AS-->>C: (B) Authorization Code
+    C->>AS: (C) Token Request<br/>+ code<br/>+ code_verifier
+    Note over AS: SHA256(verifier) == challenge
+    AS-->>C: (D) Access Token
 ```
 
             

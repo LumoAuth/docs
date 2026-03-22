@@ -426,16 +426,12 @@ User codes follow RFC 8628 Section 6.1 recommendations:
                 
                 
 ```
-╔════════════════════════════════════════╗
-║                                        ║
-║    To sign in, visit:                  ║
-║    https://app.lumoauth.dev/device     ║
-║                                        ║
-║    Enter code:  WDJB-MJHT              ║
-║                                        ║
-║    Code expires in 10 minutes          ║
-║                                        ║
-╚════════════════════════════════════════╝
+To sign in, visit:
+https://app.lumoauth.dev/device
+
+Enter code:  WDJB-MJHT
+
+Code expires in 10 minutes
 ```
 
             

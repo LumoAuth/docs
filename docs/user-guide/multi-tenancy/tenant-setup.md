@@ -100,37 +100,38 @@ See the [Admin API](/admin) documentation for the full list of available endpoin
 
 Each tenant owns the following resources:
 
-```
-Tenant
-├── Users
-│   ├── Profiles
-│   ├── MFA Methods
-│   ├── Passkey Credentials
-│   └── Social Accounts
-├── Applications (OAuth Clients)
-│   ├── Access Tokens
-│   ├── Refresh Tokens
-│   └── Authorization Codes
-├── Access Control
-│   ├── Roles
-│   ├── Permissions
-│   ├── Groups
-│   ├── ABAC Policies
-│   └── Zanzibar Relations
-├── Identity Providers
-│   ├── Social Login Providers
-│   ├── SAML IdP Configs
-│   ├── OIDC IdP Configs
-│   └── LDAP Configs
-├── Configuration
-│   ├── Auth Settings
-│   ├── Email Templates
-│   ├── Signing Keys
-│   ├── Custom Domains
-│   └── Webhooks
-└── Compliance
-    ├── Audit Logs
-    └── GDPR Requests
+```mermaid
+graph TD
+    Tenant
+    Tenant --> Users
+    Users --> Profiles
+    Users --> MFA["MFA Methods"]
+    Users --> Passkeys["Passkey Credentials"]
+    Users --> Social["Social Accounts"]
+    Tenant --> Apps["Applications (OAuth Clients)"]
+    Apps --> AT["Access Tokens"]
+    Apps --> RT["Refresh Tokens"]
+    Apps --> AC["Authorization Codes"]
+    Tenant --> AC2["Access Control"]
+    AC2 --> Roles
+    AC2 --> Permissions
+    AC2 --> Groups
+    AC2 --> ABAC["ABAC Policies"]
+    AC2 --> Zanzibar["Zanzibar Relations"]
+    Tenant --> IdP["Identity Providers"]
+    IdP --> Social2["Social Login Providers"]
+    IdP --> SAML["SAML IdP Configs"]
+    IdP --> OIDC["OIDC IdP Configs"]
+    IdP --> LDAP["LDAP Configs"]
+    Tenant --> Config["Configuration"]
+    Config --> AuthSettings["Auth Settings"]
+    Config --> EmailTemplates["Email Templates"]
+    Config --> SigningKeys["Signing Keys"]
+    Config --> Domains["Custom Domains"]
+    Config --> Webhooks
+    Tenant --> Compliance
+    Compliance --> AuditLogs["Audit Logs"]
+    Compliance --> GDPR["GDPR Requests"]
 ```
 
 ---

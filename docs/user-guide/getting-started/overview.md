@@ -62,7 +62,7 @@ LumoAuth gives you the power of Auth0, Okta, or Keycloak - with built-in support
 - **Webhooks** - Real-time event notifications for user lifecycle events
 - **Observability** - Datadog and Axiom integration for logs and tracing
 - **Email Templates** - Customizable transactional emails (welcome, verification, password reset, MFA)
-- **SDKs** - Go SDK, Spring Boot integration
+- **SDKs** - Javascript/Typescript, React/NextJS integration, Enable security for popular AI agent frameworks
 
 ### AI & Automation
 - **Workload Identity** - Register and authenticate autonomous AI agents
@@ -73,30 +73,18 @@ LumoAuth gives you the power of Auth0, Okta, or Keycloak - with built-in support
 
 ## Architecture Overview
 
-```
-┌─────────────────────────────────────────────────────┐
-│                    LumoAuth Platform                 │
-│                                                     │
-│  ┌──────────────┐  ┌──────────────┐                 │
-│  │ Tenant Portal │  │ Tenant Portal │   ...          │
-│  │  /t/acme/     │  │  /t/corp/     │                │
-│  └──────┬───────┘  └──────┬───────┘                 │
-│         │                  │                         │
-│  ┌──────┴──────────────────┴─────────────────────┐  │
-│  │              Core Auth Engine                  │  │
-│  │  OAuth 2.0 │ OIDC │ SAML │ SCIM │ WebAuthn   │  │
-│  └───────────────────┬───────────────────────────┘  │
-│                      │                               │
-│  ┌───────────────────┴───────────────────────────┐  │
-│  │           Security & Policy Layer              │  │
-│  │  RBAC │ ABAC │ Zanzibar │ Adaptive MFA        │  │
-│  └───────────────────┬───────────────────────────┘  │
-│                      │                               │
-│  ┌───────────────────┴───────────────────────────┐  │
-│  │           Data & Integration Layer             │  │
-│  │  Users │ Audit │ Webhooks │ GDPR │ Analytics  │  │
-│  └───────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph Platform["LumoAuth Platform"]
+        subgraph Tenants["Tenant Portals"]
+            TP1["/t/acme/"]
+            TP2["/t/corp/"]
+            TPn["..."]
+        end
+        Tenants --> Core["Core Auth Engine\nOAuth 2.0 | OIDC | SAML | SCIM | WebAuthn"]
+        Core --> Security["Security & Policy Layer\nRBAC | ABAC | Zanzibar | Adaptive MFA"]
+        Security --> Data["Data & Integration Layer\nUsers | Audit | Webhooks | GDPR | Analytics"]
+    end
 ```
 
 ---

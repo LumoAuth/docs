@@ -68,10 +68,12 @@ When magic link is enabled, the login page shows a **"Send me a sign-in link"** 
 
 The email-first flow presents a single email input as the first step of login. After the user submits their email, LumoAuth checks whether an account exists and renders the appropriate next step:
 
-```
-[Email input] → account found?
-   ├─ Yes → show password field / magic link option
-   └─ No  → show "no account found" message or sign-up prompt
+```mermaid
+flowchart TD
+    Email["Email input"]
+    Email --> Check{"Account found?"}
+    Check -->|"Yes"| Password["Show password field / magic link option"]
+    Check -->|"No"| NoAccount["Show 'no account found' message<br/>or sign-up prompt"]
 ```
 
 This pattern is common in consumer apps (popular with Clerk, Auth0, and similar platforms) and reduces cognitive load by showing only relevant options.
@@ -85,17 +87,6 @@ Enable **Email-First Login** in auth settings:
 ```
 
 When enabled, the login page shows only an email field initially. The next step is shown after the email is submitted.
-
----
-
-## Tenant Configuration Reference
-
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `magic_link_enabled` | `false` | Enable magic link sign-in |
-| `magic_link_only` | `false` | Disable passwords; magic link is the only option |
-| `email_first` | `false` | Show email input before password/magic-link step |
-| `magic_link_expiry` | `900` | Token lifetime in seconds (15 minutes) |
 
 ---
 

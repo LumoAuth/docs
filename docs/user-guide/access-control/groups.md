@@ -6,13 +6,14 @@ Groups let you organize users into logical collections - by team, department, pr
 
 ## How Groups Work
 
-```
-Group: Engineering
-  ├── Role: editor
-  └── Members:
-      ├── alice@acme.com  → inherits editor role
-      ├── bob@acme.com    → inherits editor role
-      └── carol@acme.com  → inherits editor role
+```mermaid
+graph TD
+    G["Group: Engineering"]
+    G --> R["Role: editor"]
+    G --> M["Members"]
+    M --> A["alice@acme.com &rarr; inherits editor role"]
+    M --> B["bob@acme.com &rarr; inherits editor role"]
+    M --> C["carol@acme.com &rarr; inherits editor role"]
 ```
 
 When you assign a role to a group, every member of that group automatically receives the role's permissions. When a user is removed from the group, they lose those permissions (unless the role is also directly assigned).
@@ -82,15 +83,16 @@ A user's effective permissions come from:
 1. **Directly assigned roles** - Roles assigned to the user
 2. **Group-inherited roles** - Roles assigned to groups the user belongs to
 
-```
-User: alice@acme.com
-  ├── Direct Role: auditor
-  │   └── audit-logs:read, users:read
-  └── Group: Engineering
-      └── Role: editor
-          └── users:read, users:write, applications:read
-
-Effective: audit-logs:read, users:read, users:write, applications:read
+```mermaid
+graph TD
+    U["User: alice@acme.com"]
+    U --> DR["Direct Role: auditor"]
+    U --> GE["Group: Engineering"]
+    DR --> P1["audit-logs:read, users:read"]
+    GE --> RE["Role: editor"]
+    RE --> P2["users:read, users:write, applications:read"]
+    P1 & P2 --> EFF["Effective: audit-logs:read, users:read,<br/>users:write, applications:read"]
+    style EFF fill:#e8f5e9,stroke:#4caf50
 ```
 
 ---

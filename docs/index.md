@@ -8,7 +8,7 @@ Welcome to the LumoAuth documentation. LumoAuth is the **Identity Layer for the 
 We provide comprehensive identity, security, and access control for AI agents, while fully supporting traditional OAuth 2.0 apps.
 
 :::note[Base URL]
-All API endpoints are relative to your tenant's base URL:
+API endpoints are relative to your tenant's base URL:
 `https://app.lumoauth.dev/t/\{tenantSlug\}/api/v1/`
 
 Base hostname for EU is `https://eu.app.lumoauth.dev`

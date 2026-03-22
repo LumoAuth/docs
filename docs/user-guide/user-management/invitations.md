@@ -52,23 +52,14 @@ curl -X POST https://your-domain.com/t/{tenantSlug}/api/v1/invitations/bulk \
 
 ## Invitation Flow
 
-```
-Admin sends invitation
-       │
-       ▼
-User receives email with link
-       │
-       ▼
-User clicks link → Registration page
-       │
-       ▼
-User sets password and completes profile
-       │
-       ▼
-Account created with pre-assigned roles/groups
-       │
-       ▼
-User can log in immediately
+```mermaid
+flowchart TD
+    A["Admin sends invitation"]
+    A --> B["User receives email with link"]
+    B --> C["User clicks link \u2192 Registration page"]
+    C --> D["User sets password and completes profile"]
+    D --> E["Account created with pre-assigned roles/groups"]
+    E --> F["User can log in immediately"]
 ```
 
 ---
