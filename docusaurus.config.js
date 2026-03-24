@@ -91,7 +91,7 @@ const config = {
         apiKey: '8c98e0e14f49c548e4e7205372831740',
         indexName: 'LumoAuth Docs',
         contextualSearch: true,
-	askAi: 'jo5AW0sPYOUw',
+	askAi: 'NsLBohC5VoIs',
       },
     }),
   plugins: [
